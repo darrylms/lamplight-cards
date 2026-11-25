@@ -1,0 +1,16 @@
+# dist/lamplight.js IS committed, deliberately. HACS installs the built file
+# and there is no build step to run in CI.
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+*~
+*.swp
+
+# If a build tool is ever added
+node_modules/
+.venv/
