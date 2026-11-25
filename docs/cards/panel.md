@@ -16,7 +16,7 @@ Lamplight. This page also covers two small helpers for laying out a view.
 ### What it does
 
 A dark panel with a soft rim, and light that falls in from the corner. You can put any cards inside
-it. In the default light style, the light moves to the rows that are on, and gets brighter as more
+it. In the default light style, the light moves to the rows that are on and gets brighter as more
 of them are turned on.
 
 ### You need
@@ -113,7 +113,7 @@ cards:
 
 ### What it does
 
-Adds empty space at the foot of a view, so that your last card isn't hidden behind the phone's
+Adds empty space at the foot of a view so that your last card isn't hidden behind the phone's
 bottom bar.
 
 ### Quick start

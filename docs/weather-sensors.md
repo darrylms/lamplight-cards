@@ -1,8 +1,8 @@
 # Weather sensors
 
-The weather cards only need a weather entity. Everything else on this page is optional, and adds the
+The weather cards only need a weather entity. Everything else on this page is optional and adds the
 weather warnings and a few extra readings. It explains what each card reads and how to make the
-warning sensors, and includes a full example for the UK Met Office.
+warning sensors. There's also a full example for the UK Met Office.
 
 [← Back to the README](../README.md)
 
@@ -72,7 +72,7 @@ as yellow.
 | `Amber` | Amber | Severe |
 | `Red` | Red | Extreme |
 
-The part after "warning of" is shown as the reason, for example "Wind". Once the end time has passed
+The part after "warning of" is shown as the reason, for example "Wind". Once the end time has passed,
 the card hides the warning, even if the sensor hasn't caught up yet.
 
 > [!NOTE]
@@ -260,7 +260,7 @@ template:
         state: "{{ state_attr('binary_sensor.meteoalarm', 'expires') or 'none' }}"
 ```
 
-Meteoalarm's orange becomes `Amber`, so that the card picks the right color. For any other service,
+Meteoalarm's orange becomes `Amber` so that the card picks the right color. For any other service,
 open its sensor in **Developer tools > States** and look among its attributes for the level, the
 type and the times. Then change the template to match. This one hasn't been tested on a live system,
 so please treat it as a starting point.

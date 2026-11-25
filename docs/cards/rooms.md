@@ -3,7 +3,7 @@
 `lamplight-rooms`
 
 Every room in your home on one card, which usually goes at the top of your main view. You can see
-which rooms are lit, how warm they are, and whether a window is open.
+which rooms are lit, how warm they are and whether a window is open.
 
 [← Back to the README](../../README.md)
 
@@ -17,7 +17,7 @@ which rooms are lit, how warm they are, and whether a window is open.
 
 There is one row for each room, with its icon and name, how many lights are on, the temperature and
 humidity, and a toggle for all of its lights. The panel's light gathers around the rooms that are
-lit. Tap a row to go to the room's page.
+lit, and the whole card gets brighter as more lights come on. Tap a row to go to the room's page.
 
 This card is already a panel, so don't put it inside a `lamplight-panel`.
 
@@ -34,6 +34,11 @@ evening, with three rooms lit, a bedroom window open and a steamy bathroom:
   <img src="../images/rooms-states.png" alt="The rooms card twice: every room dark, then the lounge, study and bedroom lit, an open window counted on the bedroom row, and the bathroom at 74% humidity in deep blue" width="640">
 </p>
 
+As you turn on more lights, a soft glow comes in from the left and spreads across the card. With
+everything off, that glow isn't there. It counts the lights you list, not the bulbs inside them, so a
+group with one bulb on counts the same as a group with all of them on. A light under `extra_lights`
+counts as one more.
+
 The toggle on the right works on the whole room. If anything in the room is on, a tap turns it all
 off. If the room is dark, a tap turns everything on. You never end up with half the lights on and
 half off.
@@ -45,7 +50,7 @@ half off.
 
 ### Quick start
 
-Start with two rooms, and add the rest once those look right. This is the longest configuration in
+Start with two rooms and add the rest once those look right. This is the longest configuration in
 Lamplight, so you don't want to have to type it all out twice.
 
 ```yaml
@@ -112,7 +117,7 @@ Each room:
 
 ### Example: show open windows on the room's row
 
-A chip counts how many of its entities are on, and hides when the count is zero. It's one of the
+A chip counts how many of its entities are on and hides when the count is zero. It's one of the
 places where you'll see an open window. The others are on the
 [Windows](windows.md#one-open-window-everywhere-it-matters) page.
 

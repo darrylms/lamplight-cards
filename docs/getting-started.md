@@ -7,7 +7,7 @@ about ten minutes.
 
 ## What you need
 
-You need Home Assistant 2026.9 or later, and an administrator account, because only administrators
+You need Home Assistant 2026.9 or later and an administrator account, because only administrators
 can install cards. If you are installing with the Marketplace you also need a GitHub account. Home
 Assistant asks you to sign in to GitHub before it will add a repository from a link.
 
@@ -44,7 +44,7 @@ resource for you. There is nothing else to do.
 ### By hand
 
 1. Download the files in the `dist/` folder of this repository.
-2. Copy them into the `www/` folder of your Home Assistant configuration, so that you have:
+2. Copy them into the `www/` folder of your Home Assistant configuration so that you have:
 
    ```
    www/

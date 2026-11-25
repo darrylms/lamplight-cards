@@ -4,7 +4,7 @@ On this page you'll build the whole Lamplight dashboard from the pictures, one c
 start with an empty dashboard and a dark background. Next comes the home page, and then a page for
 each room.
 
-You don't need to know YAML. Every step has a block to copy, and tells you what to change and what
+You don't need to know YAML. Every step has a block to copy and tells you what to change and what
 you should end up with.
 
 [← Back to the README](../README.md)
@@ -276,7 +276,7 @@ cards:
 ```
 
 Under `rooms`, list the scenes that each script sets, and the light that each scene changes. The
-lamp uses these to know when to light up. If you leave out `rooms` the lamp never lights, but a tap
+lamp uses these to know when to light up. If you leave out `rooms`, the lamp never lights, but a tap
 still runs the script.
 
 <p align="center">
@@ -507,7 +507,7 @@ cards:
 ```
 
 List the same lights under `entities` and under `cards`, in the same order. `scenes` adds the
-**Scenes** list under a light, and is optional.
+**Scenes** list under a light and is optional.
 
 <p align="center">
   <img src="images/guide-lights.png" alt="The bedroom lights panel with both lights on, glowing pink" width="300">

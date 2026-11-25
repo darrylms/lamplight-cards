@@ -30,7 +30,7 @@ Below the sky you'll find:
   weather pictures so that they match the rest of the cards.
 - One line about the hours ahead. It answers "will it rain?" first, for example "Dry until 15:00 ·
   rain, 60%". On a dry day it tells you the next most useful thing instead, which could be a strong
-  wind, a high UV level, how cold it feels, or when the sun sets.
+  wind, a high UV level, how cold it feels or when the sun sets.
 - A rain chart, once the chance of rain reaches 40% in the next 12 hours.
 - Any weather warning, in the color of its level.
 
@@ -207,5 +207,5 @@ anything.
 
 ### Tips
 
-- Give the weather card and the Today popup the same sensors, so that they never disagree.
+- Give the weather card and the Today popup the same sensors so that they never disagree.
 - Forecasts change during the day, and the popup updates when yours does.

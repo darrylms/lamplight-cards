@@ -99,6 +99,17 @@ const LAMP_BAND_PAD = 4;
 // See LampShell._resized.
 const LAMP_REDRAW_WAIT = 150;
 
+// THE MOVING LIGHT (0.151.0-dev, 25 Nov 2026). The light of an activity panel moves to its new
+// place and strength; it does not jump. A full draw takes about 35 ms on the household's phone,
+// so a moving frame is drawn at a quarter of the size on a second canvas and stretched by CSS.
+// In the probe it took 6.3 ms of the main thread at CPU x4, and 99.9% of the pixels were within
+// 1 level of the true frame (test/probe-light-drift.py). The last frame is the full, dithered one.
+// Each value is a critically damped spring, so a second lamp in the middle of a move bends the
+// path; the light does not stop and start again. `rate` is per second; at `ms` 0.2% of the way is left.
+// `frame` limits the draws to 60 a second on a 120 Hz screen. `quiet` is the time after the card
+// joins the page in which a change still jumps: the light does not move on load.
+const LAMP_MOVE = { rate: 12, ms: 700, frame: 14, scale: 4, quiet: 1000 };
+
 // Composite the padding-box layers of a wash on a canvas: decimals, one
 // triangular dither (the same draw for R, G and B, so no colour speckle),
 // round once. This is the fix in 10-wash.js's note on banding.
@@ -118,7 +129,9 @@ const LAMP_REDRAW_WAIT = 150;
 // stop search starts from the last pixel's stop, and a row skips the pixels
 // outside a layer's clear last stop. The noise is an xorshift, not
 // Math.random; it has the same triangular spread.
-function lampPaintCanvas(ctx, layers, w, h) {
+// `dither` 0 draws no noise (THE MOVING LIGHT: a stretched noise pixel would show). Default 1.
+function lampPaintCanvas(ctx, layers, w, h, dither) {
+  const amp = dither === undefined ? 1 : dither;
   const im = ctx.createImageData(w, h);
   const d = im.data;
   // Bottom layer first. A solid layer covers all below it exactly, so start there.
@@ -219,7 +232,7 @@ function lampPaintCanvas(ctx, layers, w, h) {
       seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5;
       const r1 = (seed >>> 0) / 4294967296;
       seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5;
-      const n0 = r1 - (seed >>> 0) / 4294967296;
+      const n0 = (r1 - (seed >>> 0) / 4294967296) * amp;
       d[o] = r + n0; d[o + 1] = g + n0; d[o + 2] = b + n0; d[o + 3] = 255;
       o += 4;
     }
@@ -289,6 +302,7 @@ class LampShell extends HTMLElement {
   disconnectedCallback() {
     if (this._ro) { this._ro.disconnect(); this._ro = null; }
     if (this._redraw) { clearTimeout(this._redraw); this._redraw = null; }
+    this._stopLight();
   }
 
   // Home Assistant takes a card out of the document and puts it back while it
@@ -296,6 +310,7 @@ class LampShell extends HTMLElement {
   // ResizeObserver must run again here, or the canvas stays blank (0.17.4-dev:
   // every card except Waste).
   connectedCallback() {
+    this._joinedAt = Date.now();
     if (this._canvas && !this._ro) this._observeCanvas();
   }
 
@@ -364,6 +379,18 @@ class LampShell extends HTMLElement {
     };
   }
 
+  // The fraction that fills the card with light, or 0 for no fill. Only LampRooms has one
+  // (THE ROOM FILL in 10-wash.js).
+  _fillFraction() { return 0; }
+
+  // The light of an activity panel: where it is on the screen now while it moves, or where the
+  // rows put it.
+  _lightNow() {
+    if (this._lightAt) return this._lightAt;
+    const m = this._metrics();
+    return { a: m.a, b: m.b, py: m.py, f: this._fillFraction() || 0 };
+  }
+
   // The bounce alpha of an accent panel. `bounce_strength` in the configuration replaces it.
   _bounce() {
     if (this._config.bounce_strength !== undefined) return this._config.bounce_strength;
@@ -375,8 +402,9 @@ class LampShell extends HTMLElement {
       return 'linear-gradient(' + LAMP_GROUND + ', ' + LAMP_GROUND + ') padding-box,\n    ' +
         'linear-gradient(rgba(255,255,255,0.07), rgba(255,255,255,0.07)) border-box';
     }
-    const H = this._accent(), m = this._metrics();
+    const H = this._accent();
     if (this._lightStyle === 'accent') {
+      const m = this._metrics();
       const edge = this._config.light_from === 'top-edge';
       const fill = this._config.glow_strength !== undefined ? this._config.glow_strength
                  : (edge ? LAMP_EDGE_FILL : LAMP_DEFAULTS.shell.light.accent.glow_strength);
@@ -386,7 +414,8 @@ class LampShell extends HTMLElement {
               : (this._entities.length ? m.b : (edge ? LAMP_EDGE_RIM : fill));
       return (edge ? lampEdgeWash : lampAccentWash)(H, fill, b, this._grain, this._bounce());
     }
-    return lampActivityWash(H, m.a, m.b, m.py, this._grain, this._config.light_from === 'top-edge');
+    const l = this._lightNow();
+    return lampActivityWash(H, l.a, l.b, l.py, this._grain, this._config.light_from === 'top-edge', l.f);
   }
 
   // The same wash as _background(), as layer data for lampPaintCanvas instead
@@ -396,32 +425,135 @@ class LampShell extends HTMLElement {
   _washLayers() {
     if (!this._grain) return null;     // smooth_gradient: false asks for no dither either
     if (this._lightStyle === 'off') return null;
-    const H = this._accent(), m = this._metrics();
+    const H = this._accent();
     if (this._lightStyle === 'accent') {
       const edge = this._config.light_from === 'top-edge';
       const fill = this._config.glow_strength !== undefined ? this._config.glow_strength
                  : (edge ? LAMP_EDGE_FILL : LAMP_DEFAULTS.shell.light.accent.glow_strength);
       return (edge ? lampEdgeLayers : lampAccentLayers)(H, fill, this._bounce());
     }
-    return lampActivityLayers(H, m.a, m.b, m.py, this._config.light_from === 'top-edge');
+    const l = this._lightNow();
+    return lampActivityLayers(H, l.a, l.b, l.py, this._config.light_from === 'top-edge', l.f);
   }
 
   _paint() {
     if (!this._card) return;
-    let bg, layers;
+    let bg, layers, to = null;
+    const at = this._lightAt;
+    this._lightAt = null;              // the target, not the frame on the screen
     try {
       bg = this._background();
       layers = this._washLayers();
+      if (this._lightStyle === 'activity' && layers && this._washLayers === LampShell.prototype._washLayers) {
+        to = this._lightNow();
+        to.H = this._accent();
+      }
     } catch (e) {
+      this._lightAt = at;
       return;                          // no accent yet; paint on the next state
     }
-    if (bg === this._bg) return;       // nothing moved, so write nothing
+    this._lightAt = at;
+    if (bg === this._bg) {             // nothing moved, so write nothing
+      // A card whose rows are all off paints the same with and without a state. Keep the light
+      // here too, or the first lamp jumps.
+      if (this._hass && !this._lightAt) this._lightTo = to;
+      return;
+    }
     this._bg = bg;
     this._layers = layers;
+    if (this._canMove(to)) { this._moveLight(to); return; }
+    this._stopLight(true);
+    this._lightTo = this._hass ? to : null;
+    this._paintStill();
+  }
+
+  // The wash at rest: the CSS of this._bg and the full canvas.
+  _paintStill() {
     const st = this._card.style;
-    lampShellProps(bg, this._config.radius, this._config.shadow)
+    lampShellProps(this._bg, this._config.radius, this._config.shadow)
       .forEach(function (p) { st.setProperty(p[0], p[1], 'important'); });
     this._paintCanvas();
+  }
+
+  // ---- the moving light (LAMP_MOVE) ---------------------------------------
+
+  // this._lightTo is the light of the last paint. It is null until a paint with a state, so the
+  // first state of a card jumps. A new accent jumps: the light does not change colour as it moves.
+  _canMove(to) {
+    const from = this._lightTo;
+    if (!to || !from || from.H !== to.H || !this._canvas || !this.isConnected) return false;
+    if (Date.now() - (this._joinedAt || 0) < LAMP_MOVE.quiet) return false;
+    if (document.visibilityState !== 'visible') return false;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+    const r = this._card.getBoundingClientRect();
+    return r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < window.innerHeight;
+  }
+
+  _moveLight(to) {
+    if (!this._lightAt) {
+      this._lightAt = Object.assign({}, this._lightTo);
+      this._lightVel = { a: 0, b: 0, py: 0, f: 0 };
+    }
+    this._lightTo = to;
+    this._lightEnd = null;             // a new target starts the time again
+    if (this._lightRaf) return;
+    const self = this;
+    let last = null;
+    const step = function (t) {
+      if (last === null) last = t;
+      if (self._lightEnd === null) self._lightEnd = last + LAMP_MOVE.ms;
+      if (t < self._lightEnd && t > last && t - last < LAMP_MOVE.frame) {
+        self._lightRaf = requestAnimationFrame(step);
+        return;
+      }
+      if (t >= self._lightEnd) { self._lightRaf = null; self._stopLight(); return; }
+      self._lightStep((t - last) / 1000);
+      last = t;
+      self._lightRaf = requestAnimationFrame(step);
+    };
+    this._lightRaf = requestAnimationFrame(step);
+  }
+
+  // Move each value by `dt` seconds along its spring, and draw the frame.
+  _lightStep(dt) {
+    const at = this._lightAt, v = this._lightVel, to = this._lightTo, w = LAMP_MOVE.rate, e = Math.exp(-w * dt);
+    ['a', 'b', 'py', 'f'].forEach(function (k) {
+      const d = at[k] - to[k], c = v[k] + w * d;
+      at[k] = to[k] + (d + c * dt) * e;
+      v[k] = (v[k] - w * c * dt) * e;
+    });
+    if (!this._lightCanvas) {
+      this._lightCanvas = document.createElement('canvas');
+      this._lightCanvas.style.cssText = this._canvas.style.cssText;
+      this._canvas.after(this._lightCanvas);
+    }
+    const cv = this._lightCanvas, W = this._card.clientWidth, H = this._card.clientHeight;
+    if (!W || !H) return;
+    const w2 = Math.ceil(W / LAMP_MOVE.scale), h2 = Math.ceil(H / LAMP_MOVE.scale);
+    if (cv.width !== w2) cv.width = w2;
+    if (cv.height !== h2) cv.height = h2;
+    // A length in px becomes a length on the small canvas.
+    const layers = this._washLayers().map(function (l) {
+      const o = Object.assign({}, l);
+      if (o.ryPx !== undefined) o.ryPx = o.ryPx * h2 / H;
+      if (o.cyPx !== undefined) o.cyPx = o.cyPx * h2 / H;
+      return o;
+    });
+    lampPaintCanvas(cv.getContext('2d'), layers, w2, h2, 0);
+    cv.style.display = '';
+    this._card.style.setProperty('background', lampActivityRim(to.H, at.b, at.py).join(', '), 'important');
+  }
+
+  // End the move and draw the light at rest. `quiet`: the caller draws.
+  _stopLight(quiet) {
+    if (this._lightRaf) { cancelAnimationFrame(this._lightRaf); this._lightRaf = null; }
+    if (!this._lightAt) return;
+    this._lightAt = null;
+    // A card that left the page has no size to draw at. A canvas with no width is drawn when the
+    // card comes back (_resized).
+    if (this._canvas && !this.isConnected) this._canvas.width = 0;
+    if (!quiet) this._paintStill();
+    if (this._lightCanvas) this._lightCanvas.style.display = 'none';
   }
 
   // The dithered canvas that sits over the CSS wash. The CSS stays, so
@@ -435,6 +567,7 @@ class LampShell extends HTMLElement {
         if (this._ro) { this._ro.disconnect(); this._ro = null; }
         this._canvas.remove();
         this._canvas = null;
+        if (this._lightCanvas) { this._lightCanvas.remove(); this._lightCanvas = null; }
       }
       return;
     }
@@ -483,6 +616,8 @@ class LampShell extends HTMLElement {
     // out of the page, and the panel fell back to the PNG grain until a reload.
     if (this._ro) { this._ro.disconnect(); this._ro = null; }
     if (this._redraw) { clearTimeout(this._redraw); this._redraw = null; }
+    if (this._lightRaf) { cancelAnimationFrame(this._lightRaf); this._lightRaf = null; }
+    this._lightAt = this._lightTo = this._lightCanvas = null;
     this._canvas = null;
     this._washes = [];
     this._washFor = null;

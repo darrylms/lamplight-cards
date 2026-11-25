@@ -6,7 +6,7 @@ There are a few ideas behind Lamplight. The rest of the cards make more sense on
 
 ## The panel
 
-Most Lamplight cards sit on the same panel, which has a dark background, a soft rim, and light that
+Most Lamplight cards sit on the same panel, which has a dark background, a soft rim and light that
 falls in from the right edge. There are two exceptions. The weather card has a painted sky instead,
 and the house scenes have no panel light because their lamps glow on their own. What the light does
 depends on the panel's [light style](#three-light-styles).
@@ -26,7 +26,7 @@ The `light_style` key decides how the light behaves.
 
 | Style | What the light does | Good for |
 |---|---|---|
-| `activity` (the default) | Moves to the rows that are on, and gets brighter as more of them turn on. With nothing on, the panel rests in a faint glow. | Lights, rooms, anything you switch on and off |
+| `activity` (the default) | Moves to the rows that are on, and gets a bit stronger as more of them turn on. On the rooms card it spreads across the whole card. With nothing on, the panel rests in a faint glow. | Lights, rooms, anything you switch on and off |
 | `accent` | Shines steadily from the top-right corner. | Panels that show information, such as climate or windows |
 | `off` | No light. The panel is dark and the cards inside it glow on their own. | Cards that already have their own light, such as the house scenes |
 

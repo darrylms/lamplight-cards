@@ -2,8 +2,8 @@
 
 `lamplight-chips`
 
-A row of small pill buttons for the things you do most, like a scene for the evening, or turning off
-every light. You can put the row at the foot of a panel, or in a panel of its own anywhere on your
+A row of small pill buttons for the things you do most, like a scene for the evening or turning off
+every light. You can put the row at the foot of a panel or in a panel of its own anywhere on your
 dashboard.
 
 [← Back to the README](../../README.md)
@@ -17,7 +17,7 @@ dashboard.
 ### What it does
 
 A strip of pill-shaped buttons that run a scene or a script, or open a device. You can set a chip to
-only show in certain months, so that the heating button isn't there in the summer.
+only show in certain months so that the heating button isn't there in the summer.
 
 ### You need
 

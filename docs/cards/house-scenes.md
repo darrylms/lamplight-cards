@@ -18,7 +18,7 @@ Each routine is a lamp with its name underneath, and tapping it runs the script.
 its color while the scenes it set are still in place. If you change some of those lights by hand,
 the lamp dims and a short line under the name shows how much of the routine is still set.
 
-The lamps can be placed along a curved path through the day, or in a grid. The path is the default.
+The lamps can be placed along a curved path through the day or in a grid. The path is the default.
 On it, each routine is a glass lamp. They rise from Morning to Evening and set again towards
 Bedtime, with the names on the land below the horizon.
 
@@ -129,7 +129,7 @@ cards:
 
 </details>
 
-Tapping a script or scene chip runs it. Anything else opens its details, unless the chip has its own
+Tapping a script or scene chip runs it. Anything else opens its details unless the chip has its own
 `tap_action`, like the **All lights off** button above.
 
 ### Showing buttons only in some months
@@ -140,7 +140,7 @@ gap.
 
 You can put `months` in two places:
 
-- **On the whole card**, under `type`. Every button follows it, unless it has a list of its own.
+- **On the whole card**, under `type`. Every button follows it unless it has a list of its own.
 - **On one button.** The button uses its own list in place of the card's list. They aren't added
   together.
 
@@ -215,4 +215,4 @@ Without `rooms`, a lamp never lights up. A tap still runs the routine.
 - The `orb` style works with any palette color except the four waste bin ones (`grape`, `mustard`,
   `bluebell` and `mint`). Five of the orbs (`heather`, `honey`, `persimmon`, `cerulean` and
   `periwinkle`) were matched to reference pictures. The rest are worked out from whichever of those
-  five is closest in color, so that they look like part of the same set.
+  five is closest in color so that they look like part of the same set.

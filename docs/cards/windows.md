@@ -3,7 +3,7 @@
 `lamplight-window-strip` · `lamplight-windows-detail`
 
 A small panel for the foot of your main view, and popups with the details. They tell you whether a
-window is open, and what the weather is like outside.
+window is open and what the weather is like outside.
 
 [← Back to the README](../../README.md)
 
@@ -19,7 +19,7 @@ bedroom's left window, 35 minutes after someone opened it on a cold morning. In 
 1. On the [rooms card](rooms.md), the bedroom row counts it with a small blue window.
 2. In the bedroom's Windows panel, the window's [row](rows.md) turns blue and says "open".
 3. In the bedroom's windows popup, the window is open in the picture, with a soft blue light in the
-   gap. The popup says "1 open", since when, and how cold it feels.
+   gap. The popup says "1 open", since when and how cold it feels.
 4. On the main view, the window strip lights up blue, says "1 open" and names the window. A small
    pill warns you about the cold as well.
 5. The whole-home popup names the window in its first line, with the same warning.
@@ -96,7 +96,7 @@ If you only want windows, leave out the battery strip and its popup.
 ### What it does
 
 This is another small panel with a glass lamp. It shows how many windows are open ("2 open") and
-which ones, and the light turns sky blue while any of them is open. When they are all closed it
+which ones, and the light turns sky blue while any of them is open. When they are all closed, it
 tells you about the day instead: "None opened today", or when the last window was closed.
 
 If you give it a weather entity, a small pill appears while a window is open and rain, cold or a
@@ -179,7 +179,7 @@ wind warning.
 ### For the whole home
 
 Give it `rooms` and it lists every window, grouped by room, with how many are open in each. When
-they are all closed it tells you about the day, for example "None opened today". When a window is
+they are all closed, it tells you about the day, for example "None opened today". When a window is
 open, the first line names it. If the weather is good, it adds how long it will stay dry.
 
 <p align="center">

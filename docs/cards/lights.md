@@ -128,7 +128,7 @@ nobody has changed the light since.
 
 ### You need
 
-- One or more scenes. You can create your own, or use the ones that come with an integration. See
+- One or more scenes. You can create your own or use the ones that come with an integration. See
   [Home Assistant Scenes](https://www.home-assistant.io/integrations/scene/) to learn more about
   them.
 - Optional: the light they belong to, to mark the active scene.

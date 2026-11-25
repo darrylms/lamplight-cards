@@ -2,7 +2,7 @@
 
 `lamplight-header`
 
-This goes at the top of a room's page. It has the room's name, a way back home, and a soft glow when
+This goes at the top of a room's page. It has the room's name, a way back home and a soft glow when
 a lamp in the room is on.
 
 [← Back to the README](../../README.md)

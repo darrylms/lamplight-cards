@@ -1,7 +1,7 @@
 # Styling
 
 You don't have to style Lamplight at all. If you do want to make it your own, this page has the
-colors, what each one means, and the things you can change.
+colors, what each one means and the things you can change.
 
 [← Back to the README](../README.md)
 

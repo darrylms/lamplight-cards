@@ -21,7 +21,7 @@ The other popup bodies are on their own pages: [smart plugs](smart-plugs.md#lamp
 
 A sheet that slides up when the page address ends in its hash, such as `#coffee-machine`. It has a
 picture at the top, then the title, then the cards that you put inside. To close it, use the close
-button, tap outside it, or use your phone's back gesture.
+button, tap outside it or use your phone's back gesture.
 
 ### You need
 
@@ -93,7 +93,7 @@ tap_action:
 The popup has to be on the same view as the card that opens it.
 
 > [!IMPORTANT]
-> The hash has to match exactly. If it doesn't there is no warning. The tap just does nothing, which
+> The hash has to match exactly. If it doesn't, there is no warning. The tap just does nothing, which
 > can be confusing.
 
 ## lamplight-purifier-detail
@@ -107,7 +107,7 @@ long it has until it needs cleaning or replacing.
 ### You need
 
 - The purifier, as a `fan` entity.
-- Optional: an air quality sensor (PM2.5), and a sensor for each filter's life in %.
+- Optional: an air quality sensor (PM2.5) and a sensor for each filter's life in %.
 
 ### Quick start
 

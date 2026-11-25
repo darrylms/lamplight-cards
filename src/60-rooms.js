@@ -166,6 +166,9 @@ class LampRooms extends LampShell {
 
   getCardSize() { return 1 + this._rooms.length; }
 
+  // The card fills with light as the lights come on (THE ROOM FILL in 10-wash.js).
+  _fillFraction() { return lampActivity(this._hass, this._entities).f; }
+
   // ---- the data ----------------------------------------------------------
 
   // The members of a light group. A light that is not a group counts as its

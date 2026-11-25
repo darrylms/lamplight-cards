@@ -1,7 +1,7 @@
 # Companion cards
 
 Lamplight only needs Home Assistant. If you already use one of the cards below, though, it can be
-used inside Lamplight. This page explains where each one goes, and what you get without it.
+used inside Lamplight. This page explains where each one goes and what you get without it.
 
 [← Back to the README](../README.md)
 

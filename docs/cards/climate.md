@@ -2,7 +2,7 @@
 
 `lamplight-climate` · `lamplight-climate-detail`
 
-These cards show how warm a room is, how damp it is, and whether it feels comfortable. The popup
+These cards show how warm a room is, how damp it is and whether it feels comfortable. The popup
 explains the last day in plain words.
 
 [← Back to the README](../../README.md)
@@ -43,7 +43,7 @@ cards:
     accent: marigold
 ```
 
-Give each row its room's color, so that the wave matches the lights in that room.
+Give each row its room's color so that the wave matches the lights in that room.
 
 ### More options
 

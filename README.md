@@ -7,34 +7,36 @@
 </h1>
 
 This project grew out of a desire to build one card to represent the lights, temperature and humidity in a room. 
-It eventually became the rooms card. It had a distinct aesthetic and I wanted to build out more of it to 
+It became the rooms card which had a distinct aesthetic. I wanted to build out more of it to 
 see where it would go.
 
 So now there are far more cards.
 
-I built them to meet the needs of my dashboard. So how I use the cards is going to reflect some of my quirks:
+I built them to meet the needs of my dashboard. How I use the cards is going to reflect some of my quirks:
+
  - The cards are sized to fit on a phone.
  - Decoration encodes state.
  - It is colorful. You can make it less colorful if you want.
  - The cards are built around the devices I use.
  - There is an optional cover that can be placed over a light's brightness slider so that I don't accidentally 
-   change it while I am scrolling. I know there are other ways to do this. Yes, I was having fun. I told you 
+   change it while scrolling. I know there are other ways to do this. Yes, I was having fun. I told you 
    it was quirky. It's _optional_.
 
-They are shared here in case you find them useful. 
+The cards are shared here in case you find them useful. 
  
 #### So what are they?
 
-Most of the panels have a dark background and one accent color, with light coming in from the right
-edge. On the rooms card and the lights panels, that light collects around whatever is switched on,
-and the more you turn on, the brighter the panel gets.
+Most of the panels have a dark background and one accent color with light coming in from the right
+edge. On the rooms card and the light panels, that light moves towards whatever is switched on,
+and it gets a bit stronger as you turn on more. On the rooms card the whole card gets lighter too, even over on the
+left, so a house with every light on really does look warmer than one with a single lamp.
 
 <p align="center">
-  <img src="docs/images/rooms-follow.png" alt="The rooms card twice: the bedroom lit, with the glow at the bottom, then the lounge, hallway and study lit, with a brighter glow higher up" width="640">
+  <img src="docs/images/rooms-follow.png" alt="The rooms card twice: the bedroom lit, with the glow at the bottom, then the lounge, hallway and study lit, with the glow higher up and the whole card lighter" width="640">
 </p>
 
 On panels that show information, like climate, windows and waste, the light stays where it is. The
-weather card has its painted sky instead, and the house scenes glow on their own.
+weather card does its own thing and the house scenes glow on their own.
 
 <p align="center">
   <img src="docs/images/weather-day.png" alt="The weather card on a sunny day, with its painted sky" width="400">
@@ -58,15 +60,14 @@ Here is how it all looks together:
 
 ### The light cards have a glow to them
 
-Turn on a lamp and the panel's light drifts towards that row. Turn on three and the whole panel
-warms up. You can see which rooms are lit before you have read a word. That's the whole point,
-really.
+Turning on a light causes the panel's light to drift towards that row. Turn on three and the whole panel
+warms up. You can see which lights are lit before you scan the text. 
 
 <p align="center">
   <img src="docs/images/light-follows.png" alt="The same lights panel twice: one lamp on at the bottom, then all three on. The sliders have the optional slider lock" width="640">
 </p>
 
-Each room has its own accent color and the glow uses it, so no two rooms feel quite the same. These
+You can give each room has its own accent color and the glow uses it. That way no two rooms feel quite the same. These
 are the hallway, study, bathroom and bedroom on the dashboard in these pictures, with the lights on:
 
 <table>
@@ -80,12 +81,12 @@ are the hallway, study, bathroom and bedroom on the dashboard in these pictures,
 
 ### Unified look and feel
 
-Most of the cards use the same dark panel, so they match even though their light behaves differently.
-You choose a color for each panel from a list of names (`marigold`, `lagoon`, `rose` and so on). It
-saves you from fiddling with RGB values.
+Most of the cards use the same dark panel so they match even though their light behaves differently.
+You choose a color for each panel from a list of names (`marigold`, `lagoon`, `rose` and [so on](docs/styling.md)). 
+It saves you from messing with RGB values.
 
-If there is a standard Home Assistant card that you'd like to keep, put it in a Lamplight panel. It
-will pick up the same colors.
+If there is a standard Home Assistant card that you'd like to use, put it in a Lamplight panel. It
+will pick up the same colors (though it might need some additional styling).
 
 ### Custom weather card with its own popup
 
@@ -105,8 +106,8 @@ jump between pictures.
   <img src="docs/images/weather-night.png" alt="The weather card on a clear night, with the moon and a few stars" width="400">
 </p>
 
-Below the sky are the next few hours and a one-line answer to "will it rain?". If rain looks likely
-there is a rain chart as well, and any weather warnings are shown too.
+Below the sky are the next few hours and a one-line summary of the weather. If rain looks likely
+there is a rain chart at the bottom. Weather warnings are shown too.
 
 Tap the card and the Today popup slides up. It has the whole day in it: the high and low, sunrise and
 sunset, a sentence about how the day will go, and a single timeline of what's coming. When rain is on
@@ -123,7 +124,7 @@ extra step to set up, which is on the
 The weather isn't limited to the weather card. Some of the other cards use it too.
 
 The same moon, in the same phase, is on the arc in the Today popup and in the windows popups. The
-phase is worked out from the date, so you don't need another sensor for it.
+phase is worked out from the date so you don't need another sensor for it.
 
 Open the windows popup for a room and you are looking out at that same sky, with the weather and time
 of day as they are right now. On a clear day it's blue, with the sun in the window and its light
@@ -135,7 +136,7 @@ the moon and a paler light instead.
 </p>
 
 The smaller details use weather data as well. In the climate popup, the outside temperature for the
-last 24 hours is drawn under the room's own line, so that you can see how far the room follows the
+last 24 hours is drawn under the room's own line so that you can see how far the room follows the
 weather. It reads the temperature sensor from your weather integration. The windows popups look ahead
 instead, and check the forecast for rain, snow or cold in the next few hours.
 
@@ -159,7 +160,7 @@ Most of the time Lamplight keeps quiet. When something needs your attention, the
 it will tell you in plain words. Once you have sorted it out, the note goes away.
 
 Weather warnings get the most room. On the weather card, a warning is shown in the color of its level,
-along with when it starts or ends. The Today popup puts it right at the top, and marks the hours it
+along with when it starts or ends. The Today popup puts it right at the top and marks the hours it
 covers on the timeline.
 
 <p align="center">
@@ -171,7 +172,7 @@ There are some smaller nudges too:
 - If you leave a window open while a warning, rain, snow or cold is on the way, the windows popup lets
   you know. The small windows panel gets a mark as well. In fact, an open window shows up on
   [five cards at once](docs/cards/windows.md#one-open-window-everywhere-it-matters).
-- The batteries panel turns orange when a battery runs low, and tells you which one to replace. You'll
+- The batteries panel turns orange when a battery runs low and tells you which one to replace. You'll
   also find it under Replace soon in the batteries popup.
 - The climate popup only adds a "Worth a look" note when there is something to see. That could be a room
   that's been humid for most of the week, or one that's much colder or warmer than the week before.
@@ -194,7 +195,7 @@ Lamplight works without any other plugins. If you already use
 [Bubble Card](https://github.com/Clooos/Bubble-Card) or
 [mini-graph-card](https://github.com/kalkih/mini-graph-card), it can make use of them. Bubble Card gives
 each light a brightness slider, and mini-graph-card adds graphs to the popups. Without them every card
-still works, and still looks finished.
+still works and still looks finished.
 
 ## The cards
 
@@ -302,7 +303,7 @@ There are 22 cards in 14 groups. Each group has its own page, and tapping a pict
 1. In Home Assistant, go to **Settings > Marketplace** and select **Add from link**.
    Enter `OWNER/lamplight-cards`, choose **Dashboards** if it asks for a type, and select **Add**.
    Then open **Lamplight Cards**, select **Install** and reload your browser. The Marketplace copies
-   the cards and their pictures, and adds the dashboard resource for you.
+   the cards and their pictures and adds the dashboard resource for you.
    <!-- TODO: replace OWNER with the GitHub account, when the repository exists. -->
 
    If you are on Home Assistant 2026.10 or earlier, use HACS in the same way. To install it by hand
@@ -355,12 +356,12 @@ instead.
 
 ## Learn more
 
-- [Getting started](docs/getting-started.md) covers installing, the picture folders, and your first
+- [Getting started](docs/getting-started.md) covers installing, the picture folders and your first
   panel and popup.
 - [Build a dashboard from scratch](docs/build-a-dashboard.md) goes through the whole example
   dashboard, step by step.
 - [How it works](docs/how-it-works.md) explains panels, light, accent colors and popups.
-- [Styling](docs/styling.md) has the color palette, and shows you how to change the look.
+- [Styling](docs/styling.md) has the color palette and shows you how to change the look.
 - [Weather sensors](docs/weather-sensors.md) is about what the weather cards read. It includes a full
   Met Office example.
 - [Companion cards](docs/companions.md) is where Bubble Card and mini-graph-card come in.

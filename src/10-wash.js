@@ -171,19 +171,22 @@ function lampRadialCss(l) {
   return 'radial-gradient(' + geom[0] + ' ' + geom[1] + ' at ' + geom[2] + ' ' + geom[3] + ', ' + stops + ')';
 }
 
-function lampActivityWash(H, a, b, py, grain, edge) {
+// The last two layers of the activity wash: the ground and the rim. LampShell writes them alone
+// while the light moves, because the moving canvas covers every other layer.
+function lampActivityRim(H, b, py) {
   const B = (k) => lampNum(lampRound(b * k, 4));
-  const p = lampNum(py);
-  const L = lampActivityLayers(H, a, b, py, edge);
+  return ['linear-gradient(' + LAMP_GROUND + ', ' + LAMP_GROUND + ') padding-box',
+    'radial-gradient(120% 90% at 100% ' + lampNum(py) + '%, rgba(' + H + ',' + lampNum(b) + ') 0%, rgba(' + H + ',' + B(0.35) + ') 38%, rgba(' + H + ',' + B(0.1) + ') 100%) border-box'];
+}
+
+function lampActivityWash(H, a, b, py, grain, edge, fill) {
+  const L = lampActivityLayers(H, a, b, py, edge, fill);
   const layers = [];
   if (grain) layers.push('url(' + LAMP_GRAIN + ') padding-box');
   L.forEach(function (l) {
     if (!l.solid) layers.push(lampRadialCss(l) + ' padding-box');
   });
-  layers.push(
-    'linear-gradient(' + LAMP_GROUND + ', ' + LAMP_GROUND + ') padding-box',
-    'radial-gradient(120% 90% at 100% ' + p + '%, rgba(' + H + ',' + lampNum(b) + ') 0%, rgba(' + H + ',' + B(0.35) + ') 38%, rgba(' + H + ',' + B(0.1) + ') 100%) border-box'
-  );
+  layers.push.apply(layers, lampActivityRim(H, b, py));
   return layers.join(',\n    ');
 }
 
@@ -193,7 +196,17 @@ function lampActivityWash(H, a, b, py, grain, edge) {
 // from this same data, so the two cannot disagree.
 // `edge` (the panel key `light_from: top-edge`) puts the edge sheen on top, at a x 0.35, and gives the
 // bounce the far colour at a x 0.462. See THE EDGE SOURCE and THE BOUNCE OF AN EDGE PANEL.
-function lampActivityLayers(H, a, b, py, edge) {
+//
+// THE ROOM FILL (25 Nov 2026, design-docs/rooms_brightness_options.html, option 4 "The Even Wall").
+// `fill` is the active fraction f, and only LampRooms gives it. Without it the layers are the
+// same as before. Two things change with it: the shade fades by 1 - f, and one wide glow in the
+// accent enters from the left at 0.11 f. Reason: the shade (a x 0.73) got darker as the
+// light got brighter, so the left half of the Rooms card moved only L* 6.5 to 6.6 with every
+// light on. It is now 6.5 to 11.4. The bounce keeps the family strength: three times it made
+// the bottom-left corner brown (option 2). A fill over the whole card took the humidity to
+// 3.55:1, so it stays on the left. At f 0 the fill layer is omitted.
+const LAMP_ROOM_FILL = { alpha: 0.11, rx: 0.82, ry: 1.25, cy: 0.38, power: 1.2, stops: 24 };
+function lampActivityLayers(H, a, b, py, edge, fill) {
   const C = lampCore(H), M = lampEmber(H);
   const A = (k) => lampRound(a * k, 4);
   const p = py / 100, q = lampRound(100 - py, 1) / 100;
@@ -207,9 +220,10 @@ function lampActivityLayers(H, a, b, py, edge) {
          : { rx: 1.50, ry: 0.90, cx: 0.08, cy: 1,
              stops: lampSmoothStops([[M, A(0.22), 0], [M, 0, 0.66]]) },
     { rx: 0.90, ry: 0.70, cx: 0, cy: q,
-      stops: lampSmoothStops([['0,0,0', A(0.73), 0], ['0,0,0', 0, 0.72]]) },
-    { solid: 'ground' }
-  ]);
+      stops: lampSmoothStops([['0,0,0', lampRound(A(0.73) * (1 - (fill || 0)), 4), 0], ['0,0,0', 0, 0.72]]) }
+  ], fill ? [{ rx: LAMP_ROOM_FILL.rx, ry: LAMP_ROOM_FILL.ry, cx: 0, cy: LAMP_ROOM_FILL.cy,
+    stops: lampEasedStops(H, lampRound(LAMP_ROOM_FILL.alpha * fill, 4), LAMP_ROOM_FILL.stops, LAMP_ROOM_FILL.power) }] : [],
+  [{ solid: 'ground' }]);
 }
 
 // The bounce every light panel draws (1 Oct 2026). It starts at 0.048 and

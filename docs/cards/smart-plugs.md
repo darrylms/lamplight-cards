@@ -13,7 +13,7 @@ whether that's normal for it.
 
 ## Putting it together
 
-Each plug has a [`lamplight-row`](rows.md#lamplight-row) in a panel, and a popup. The row's
+Each plug has a [`lamplight-row`](rows.md#lamplight-row) in a panel and a popup. The row's
 `navigation_path` and the popup's `hash` need to be the same. Tap the row to open its popup.
 
 ```yaml
@@ -52,7 +52,7 @@ Each plug has a [`lamplight-row`](rows.md#lamplight-row) in a panel, and a popup
 
 This goes inside a smart plug's popup. The power right now is in big numbers. Below it, a short
 sentence tells you whether the device is using about what it usually does. After that come today so
-far, the last seven days, and the total since the plug was fitted.
+far, the last seven days and the total since the plug was fitted.
 
 ### What you'll see
 
@@ -81,7 +81,7 @@ example: "On, above its usual. Usually 11 W."
 
 A plug popup can have two pictures. One is the painted plug at the top, which you get with
 `header_art: live` on the popup. The other is a small drawing of the device beside the number, and
-you choose it with `device_icon`. You can use both, or only one of them.
+you choose it with `device_icon`. You can use both or only one of them.
 
 | You want | Set |
 |---|---|
