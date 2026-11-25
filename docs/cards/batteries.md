@@ -35,10 +35,10 @@ The battery strip looks best side by side with the window strip, in a
 
 ### What it does
 
-A small panel with a glass lamp in the corner. It shows the lowest battery level in large type ("46%
-lowest") and names the battery. If one needs replacing, the number turns orange and the line tells
-you which one it is. The lamp takes the color of the lowest battery's band. Tap the panel to open
-`#batteries`.
+A small panel with a battery drawn in its corner. It shows your lowest battery level in large type
+("46% lowest") and names that battery. The drawing fills to the same level in the color of its band,
+and the panel's light drops as the charge does. If a battery needs replacing the number turns orange
+and the line below tells you which one. Tap the panel to open `#batteries`.
 
 <p align="center">
   <img src="../images/strips.png" alt="The battery strip and the window strip side by side" width="375">

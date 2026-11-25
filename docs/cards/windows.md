@@ -95,12 +95,13 @@ If you only want windows, leave out the battery strip and its popup.
 
 ### What it does
 
-This is another small panel with a glass lamp. It shows how many windows are open ("2 open") and
-which ones, and the light turns sky blue while any of them is open. When they are all closed, it
-tells you about the day instead: "None opened today", or when the last window was closed.
+Another small panel, this one with a window drawn in the corner. It shows how many windows are open
+("2 open") and which ones. Open one and the right-hand side of the drawing swings out while the
+light turns sky blue. When they're all closed it tells you about the day instead: "None opened
+today", or the time the last window was closed.
 
-If you give it a weather entity, a small pill appears while a window is open and rain, cold or a
-weather warning is on the way. Tap the strip to open `#windows`.
+Give it a weather entity and a small round pill with an icon shows up next to the number when a
+window is open and rain, cold or a weather warning is on the way. Tap the strip to open `#windows`.
 
 <p align="center">
   <img src="../images/strips.png" alt="The battery strip and the window strip side by side" width="375">

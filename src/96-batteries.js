@@ -84,23 +84,44 @@ function lampBatteryList(hass, exclude, names) {
   return list;
 }
 
-// Home Assistant's battery glyph rule, the one its more-info dialog uses: at or under 5%
-// the alert outline, otherwise the level rounded to the nearest 10.
-function lampBatteryIcon(v) {
-  if (v <= 5) return 'mdi:battery-alert-variant-outline';
-  const r = Math.round(v / 10) * 10;
-  if (r >= 100) return 'mdi:battery';
-  return 'mdi:battery-' + r;
-}
-
 function lampBattEsc(x) { return String(x == null ? '' : x); }
 
 // ---- lamplight-battery-strip: the footer tile -----------------------------------------------
 
 const LAMP_BATT_TILE_RGB = LAMP_MEANINGS.battery;
 
-// The strength of the foot lamp and its light, by the band of the lowest battery.
+// The strength of the foot panel's light and edge, by the band of the lowest battery.
 const LAMP_BATT_LAMP_S = { alert: 1, notice: 0.6, hand: 0.3, full: 0.3 };
+
+// THE BATTERY GAUGE (option 4 of design-docs/footer_refresh_options.html, 25 Nov 2026, 0.152.0-dev).
+// An outline battery, 30 x 52px, filled to the level of the lowest battery in its band colour. The
+// fill is lighter at the top, with a bright line at the top of the charge and a soft glow of its own
+// colour that grows with the strength s. The empty part is a faint glass. The panel's light is
+// centred on the top of the charge, so it drops as the charge drops. `id` makes the svg ids unique,
+// `rgb` is the band colour, `s` the strength, `v` the level 0 to 1 (null: no reading, no fill).
+const LAMP_BATT_GAUGE = { w: 30, h: 52, top: 8.5, inner: 40 };
+
+function lampBattGauge(id, rgb, s, v) {
+  const G = LAMP_BATT_GAUGE, ink = lampMix(rgb, '255,255,255', 0.5);
+  const lv = v === null ? 0 : Math.max(0, Math.min(1, v));
+  // A battery at 1% still shows a line of charge.
+  const h = lv > 0 ? Math.max(1.2, G.inner * lv) : 0, top = G.top + G.inner - h;
+  const fill = !h ? '' :
+    '<g clip-path="url(#' + id + 'c)" style="filter:drop-shadow(0 0 6px rgba(' + rgb + ',' + (0.30 + 0.40 * s).toFixed(2) + '))">' +
+    '<rect x="4.25" y="' + top.toFixed(2) + '" width="21.5" height="' + h.toFixed(2) + '" fill="url(#' + id + 'f)"/>' +
+    '<rect x="4.25" y="' + top.toFixed(2) + '" width="21.5" height="1" fill="rgb(' + lampMix(rgb, '255,255,255', 0.75) + ')"/></g>';
+  return {
+    w: G.w, h: G.h, light: [G.w / 2, h ? top : G.top + G.inner],
+    svg: '<svg viewBox="0 0 30 52" width="30" height="52" style="display:block;overflow:visible">' +
+      '<defs><linearGradient id="' + id + 'f" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0" stop-color="rgb(' + lampMix(rgb, '255,255,255', 0.32) + ')" stop-opacity=".95"/>' +
+      '<stop offset="1" stop-color="rgb(' + rgb + ')" stop-opacity=".62"/></linearGradient>' +
+      '<clipPath id="' + id + 'c"><rect x="4.25" y="8.5" width="21.5" height="40" rx="4"/></clipPath></defs>' +
+      '<rect x="10.5" y="1" width="9" height="4" rx="1.5" fill="rgba(' + ink + ',.72)"/>' +
+      '<rect x="1.75" y="5.75" width="26.5" height="45.5" rx="6.5" fill="rgba(255,255,255,.025)" ' +
+      'stroke="rgba(' + ink + ',.72)" stroke-width="1.5"/>' + fill + '</svg>'
+  };
+}
 
 // The words ladder, longest-wanted first. `lowest` is list[0]; `lowCount` is how many
 // batteries sit at or under `alert`. At rest (lowCount 0) the words name the lowest battery. Fitting-text.html cases: lamplight-cards/test/verify-
@@ -159,7 +180,7 @@ class LampBatteryStrip extends LampFootPanel {
       this._setFigure('', '');
       this._registerFit(this._words, ['No readings']);
       this._words.style.color = 'rgba(255,255,255,.30)';
-      this._state = { rgb: LAMP_FOOT_REST, s: 0, icon: 'mdi:battery-unknown' };
+      this._state = { rgb: LAMP_FOOT_REST, s: 0, v: null };
       return;
     }
     const lowest = list[0];
@@ -175,10 +196,15 @@ class LampBatteryStrip extends LampFootPanel {
     this._words.style.color = 'var(--lamplight-ink-soft)';
     this._registerFit(this._words, full ? ['All at full']
       : lampBattWords(lowest, lowCount, list.length, this._categories));
-    this._state = { rgb: LAMP_BATT_TILE_RGB[band], s: LAMP_BATT_LAMP_S[band], icon: lampBatteryIcon(lowest.v) };
+    this._state = { rgb: LAMP_BATT_TILE_RGB[band], s: LAMP_BATT_LAMP_S[band], v: lowest.v / 100 };
   }
 
-  _light() { return this._state || { rgb: LAMP_FOOT_REST, s: 0, icon: 'mdi:battery-unknown' }; }
+  _light() { return this._state || { rgb: LAMP_FOOT_REST, s: 0, v: null }; }
+
+  _gauge() {
+    const l = this._light();
+    return lampBattGauge(this._gid || 'lg', l.rgb, l.s || 0, l.v);
+  }
 }
 
 customElements.define('lamplight-battery-strip', LampBatteryStrip);

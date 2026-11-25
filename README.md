@@ -136,9 +136,9 @@ the moon and a paler light instead.
 </p>
 
 The smaller details use weather data as well. In the climate popup, the outside temperature for the
-last 24 hours is drawn under the room's own line so that you can see how far the room follows the
-weather. It reads the temperature sensor from your weather integration. The windows popups look ahead
-instead, and check the forecast for rain, snow or cold in the next few hours.
+last 24 hours is drawn on the same graph as the room's temperature so that you can see how the two compare. 
+It reads the temperature sensor from your weather integration. The windows popups look ahead instead, and 
+check the forecast for rain, snow or cold in the next few hours.
 
 ### Popups for smart plugs, climate and window sensors
 
@@ -167,6 +167,10 @@ covers on the timeline.
   <img src="docs/images/heads-up-cards.png" alt="The weather card with an amber wind warning, and below it the two small panels: a battery at 14% that needs replacing, and an open window with a warning mark" width="375">
 </p>
 
+<p align="center">
+  <img src="docs/images/heads-up-popups.png" alt="Three popups with something to say: the Today popup with an amber wind warning marked on its timeline, a bedroom window left open during the warning, and a bathroom that's been humid most of the week" width="720">
+</p>
+
 There are some smaller nudges too:
 
 - If you leave a window open while a warning, rain, snow or cold is on the way, the windows popup lets
@@ -179,15 +183,16 @@ There are some smaller nudges too:
 
 On a quiet day you won't see any of these.
 
-<p align="center">
-  <img src="docs/images/heads-up-popups.png" alt="Three popups with something to say: the Today popup with an amber wind warning marked on its timeline, a bedroom window left open during the warning, and a bathroom that's been humid most of the week" width="720">
-</p>
-
 ### A batteries card and popup that can find its entities
 
 Add the batteries card and it will find every battery in your home by itself. They are sorted into
 "replace soon", "worth noticing" and "fine", so you know which one to change next. You don't have a
 list to keep up to date.
+
+<p align="center">
+  <img src="docs/images/strips.png" alt="The batteries panel showing its lowest battery, the Lounge dimmer at 33%" width="375"><br>
+  <img src="docs/images/batteries-popup.png" alt="The batteries popup listing all 18 batteries: one worth noticing, nine fine and eight at full" width="300">
+</p>
 
 ### No plugins needed but they do enhance some features
 

@@ -1,4 +1,5 @@
-// The glass lamp. lamplight-routines (src/89-routines.js) and LampFootPanel (src/21-strip.js) draw it.
+// The glass lamp. lamplight-routines (src/89-routines.js) draws it with lamp: glass. Until 0.152.0-dev the
+// foot panels (src/21-strip.js) drew it too; they now draw a gauge.
 //
 // A lamp is a round box with three parts: the glass, a lit layer on top of the glass, and an icon.
 // Each function below returns one CSS string. The card writes the string to the part named here.
@@ -15,7 +16,7 @@
 // mixed towards white, not white, and each lies over opaque colour stops. So the grey patch of option 14
 // of the Routines rework cannot return. The glass and the lit layer each hold their own highlights, so
 // the lit layer's opacity fades from one to the other.
-// The lamp has no transition in the foot panels. lamplight-routines adds its own 3s transition.
+// lamplight-routines adds its own 3s transition.
 
 function lampHighlights(T) {
   return 'radial-gradient(ellipse 42% 32% at 30% 18%, rgba(' + T + ',0.55) 0%, rgba(' + T + ',0.20) 52%, rgba(' + T + ',0) 100%), ' +
