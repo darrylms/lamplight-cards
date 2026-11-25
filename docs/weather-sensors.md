@@ -214,7 +214,7 @@ warning_end_sensor: sensor.weather_warning_end
   title without the list of areas, for example "Yellow warning of wind".
 - The times in the feed have no year, for example "valid from 2300 Thu 22 Oct to 1300 Fri 23 Oct".
   The start and end sensors add the year and turn the time into ISO 8601.
-- I deliberately didn't make the start and end timestamp sensors. A timestamp sensor would log an
+- The start and end sensors are deliberately not timestamp sensors. A timestamp sensor would log an
   error every time there's no warning and the state is `none`.
 - The Met Office sends the feed with an odd content type, so Home Assistant can't read it as
   structured data. The templates search the raw text instead. It isn't pretty, but it works.
@@ -262,7 +262,7 @@ template:
 
 Meteoalarm's orange becomes `Amber`, so that the card picks the right color. For any other service,
 open its sensor in **Developer tools > States** and look among its attributes for the level, the
-type and the times. Then change the template to match. I haven't tested this one on a live system,
+type and the times. Then change the template to match. This one hasn't been tested on a live system,
 so please treat it as a starting point.
 
 ## If something is wrong

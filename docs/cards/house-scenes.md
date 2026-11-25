@@ -165,9 +165,9 @@ the confirm button in it.
 | `confirm` | `Turn off` | The words on the button that goes ahead. It's red, because it does something you might not want |
 | `dismiss` | `Cancel` | The words on the button that backs out |
 
-I made backing out the easy choice on purpose. The dismiss button is the one that is selected, and a
-tap outside the dialog, the back gesture or the Escape key will back out too. Only the confirm
-button goes ahead.
+Backing out is the easy choice on purpose. The dismiss button is the one that is selected, and a tap
+outside the dialog, the back gesture or the Escape key will back out too. Only the confirm button
+goes ahead.
 
 It's worth using `confirm` on a button that turns off all the lights in the house, or on anything
 else that is annoying to undo by accident.
@@ -213,6 +213,6 @@ Without `rooms`, a lamp never lights up. A tap still runs the routine.
 - Two routines can set the same scene, so you might see two lamps lit at once. If you only want one,
   use `lit_lamps: one`.
 - The `orb` style works with any palette color except the four waste bin ones (`grape`, `mustard`,
-  `bluebell` and `mint`). I matched five of the orbs (`heather`, `honey`, `persimmon`, `cerulean`
-  and `periwinkle`) to reference pictures. The rest are worked out from whichever of those five is
-  closest in color, so that they look like part of the same set.
+  `bluebell` and `mint`). Five of the orbs (`heather`, `honey`, `persimmon`, `cerulean` and
+  `periwinkle`) were matched to reference pictures. The rest are worked out from whichever of those
+  five is closest in color, so that they look like part of the same set.

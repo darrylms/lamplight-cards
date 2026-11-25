@@ -119,10 +119,9 @@ See the [Weather sensors](../weather-sensors.md) page for the sensors and their 
 
 ### About the sky pictures
 
-I would rather be upfront about this: the painted sky pictures were made with an AI image generator
-(ChatGPT) and then cut to size. There are 28 of them, for seven kinds of weather in four different
-lights. If you'd prefer not to use them, set `sky_style: painted` and the card will draw the sky
-itself.
+To be upfront about it: the painted sky pictures were made with an AI image generator (ChatGPT) and
+then cut to size. There are 28 of them, for seven kinds of weather in four different lights. If
+you'd prefer not to use them, set `sky_style: painted` and the card will draw the sky itself.
 
 ## lamplight-day
 
@@ -185,7 +184,7 @@ is shown without its times.
 ### A title that changes through the day
 
 A fixed title like "Today" looks odd in the evening, when the popup is already talking about
-tomorrow. A popup's `title` can be a template, so on my dashboard it changes with the time:
+tomorrow. A popup's `title` can be a template, so it can change with the time:
 
 ```yaml
 - type: custom:lamplight-popup

@@ -14,7 +14,7 @@ card picks the right shade for what it's drawing.
   <img src="images/palette.png" alt="The Lamplight palette, with each color's soft tone on the left and its deep tone on the right" width="760">
 </p>
 
-The first ten are the colors from my own home, where Lamplight was made. They are bright and lively.
+The first ten are the colors from the home where Lamplight was made. They are bright and lively.
 
 | Name | Soft | Deep |
 |---|---|---|

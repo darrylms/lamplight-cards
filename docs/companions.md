@@ -71,7 +71,7 @@ Assistant's own light controls.
 
 ## mini-graph-card: graphs in the popups
 
-Two of the popup cards have a slot for a graph at the bottom. Any card can go there, but I think
+Two of the popup cards have a slot for a graph at the bottom. Any card can go there, but
 mini-graph-card looks best.
 
 In the climate popup (`lamplight-climate-detail`) it goes in the `graph` key:
@@ -109,8 +109,8 @@ fitted.
 
 ## layout-card
 
-I use layout-card for a one-column view, but you don't need it. Lamplight works in any view, though
-it looks best in a single column on a phone.
+layout-card is handy for a one-column view, but you don't need it. Lamplight works in any view,
+though it looks best in a single column on a phone.
 
 ## Any other card
 

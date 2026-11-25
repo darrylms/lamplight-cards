@@ -194,7 +194,7 @@ These are the same four evening states for the whole home:
 
 ### The weather in the window popups
 
-The window popups show you the weather outside, and they are probably my favorite part of Lamplight.
+The window popups show you the weather outside, and they are one of the best parts of Lamplight.
 
 The picture at the top has the light from outside. On the whole-home popup, sunlight falls into the
 room at the sun's real height and turns golden near sunset. At night there is moonlight, with the

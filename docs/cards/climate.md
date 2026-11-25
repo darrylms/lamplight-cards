@@ -82,7 +82,7 @@ you'll see the wave and the high and low once there is some history to draw from
 
 ### What it does
 
-This is the body of a room's climate popup. I built it around the questions you would actually ask
+This is the body of a room's climate popup. It's built around the questions you would actually ask
 about a room.
 
 The first is how it feels now. The temperature is in large type, with the comfort word and the

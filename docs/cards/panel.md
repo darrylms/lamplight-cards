@@ -71,8 +71,8 @@ add them.
 
 ### Tips
 
-- I find that one panel for each group of things works best. That could be the living room lights,
-  the climate readings or the plugs.
+- One panel for each group of things works best. That could be the living room lights, the climate
+  readings or the plugs.
 - Use `light_style: accent` for a climate or windows panel. It's easier to read.
 - To have the color change when a window opens, use the `first-on` rule. See [How it
   works](../how-it-works.md#the-accent-color).
@@ -82,7 +82,7 @@ add them.
 
 ### What it does
 
-Puts two cards side by side, with the same gap as the rest of your view. I made it for the battery
+Puts two cards side by side, with the same gap as the rest of your view. It was made for the battery
 strip and the window strip at the foot of a view, but you can use any two cards.
 
 ### Quick start

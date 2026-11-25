@@ -25,7 +25,7 @@ you should end up with.
 - **Use dark mode.** Lamplight is made for a dark screen. If your Home Assistant looks light, open
   your profile (your name at the bottom of the sidebar) and switch the theme to dark.
 
-To make it look like mine you'll need two extra cards, but both are optional:
+To make it look like the pictures, you'll need two extra cards, but both are optional:
 
 - [layout-card](https://github.com/thomasloven/lovelace-layout-card) keeps everything in one neat
   column, even on a computer.
@@ -76,10 +76,9 @@ views:
 
 4. Select **Save**, then close the editor.
 
-The `background` is the one I use. It's almost black, with a faint teal glow in the top-left corner
-and a faint blue one lower down. The `layout` lines make a single column in the middle of the
-screen. It's 400 pixels wide, about the width of a phone, so the dashboard looks the same
-everywhere.
+The `background` in this example is almost black, with a faint teal glow in the top-left corner and
+a faint blue one lower down. The `layout` lines make a single column in the middle of the screen.
+It's 400 pixels wide, about the width of a phone, so the dashboard looks the same everywhere.
 
 > [!TIP]
 > If you aren't using layout-card, leave out the `type` and `layout` lines. You'll still get one
@@ -139,7 +138,7 @@ cards:
   <img src="images/today-popup.png" alt="The Today popup that opens when you tap it" width="300">
 </p>
 
-On my dashboard the popup's title changes with the time of day. If you want that too, replace the
+The popup's title can also change with the time of day. If you want that, replace the
 `title` line with this:
 
 ```yaml
@@ -284,9 +283,9 @@ still runs the script.
   <img src="images/house-scenes.png" alt="The house scenes as backlit icons, with Morning lit" width="300">
 </p>
 
-Mine also has a row of buttons at the bottom. They are a [`lamplight-chips`](cards/chips.md) card
-inside the same panel, added to `cards` under the routines. See [House
-scenes](cards/house-scenes.md#buttons-under-the-scenes) for how to add them.
+The example dashboard also has a row of buttons at the bottom. They are a
+[`lamplight-chips`](cards/chips.md) card inside the same panel, added to `cards` under the routines.
+See [House scenes](cards/house-scenes.md#buttons-under-the-scenes) for how to add them.
 
 ### Step 7: Batteries and windows
 
@@ -605,14 +604,14 @@ home again.
 ## Part 4: The other rooms
 
 Repeat Part 3 for each room on your rooms card. Copy the bedroom's cards, then change the room's
-name, its color and its entities. Leave out anything the room doesn't have. My hallway, for example,
-only has a climate panel and a lights panel.
+name, its color and its entities. Leave out anything the room doesn't have. The example hallway, for
+instance, only has a climate panel and a lights panel.
 
-You can add other rows to a room too. The lounge on my dashboard has smart plugs that show their
-wattage, and an air purifier. See [Smart plugs](cards/smart-plugs.md) and [Popups](cards/popups.md)
-for how to add them.
+You can add other rows to a room too. The example lounge has smart plugs that show their wattage,
+and an air purifier. See [Smart plugs](cards/smart-plugs.md) and [Popups](cards/popups.md) for how
+to add them.
 
-These are four of my room pages, with the lights on:
+These are four of the example room pages, with the lights on:
 
 <table>
   <tr>

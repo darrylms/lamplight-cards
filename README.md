@@ -50,7 +50,7 @@ Here is how it all looks together:
 </p>
 
 > [!NOTE]
-> Lamplight is still in development. I use these cards on my own dashboard. There is no
+> Lamplight is still in development. There is no
 > visual editor so everything is set up in YAML. Please don't let that put you off. Every page in
 > these docs has an example that you can copy and paste.
 
@@ -67,7 +67,7 @@ really.
 </p>
 
 Each room has its own accent color and the glow uses it, so no two rooms feel quite the same. These
-are the hallway, study, bathroom and bedroom on my dashboard, with the lights on:
+are the hallway, study, bathroom and bedroom on the dashboard in these pictures, with the lights on:
 
 <table>
   <tr>
@@ -145,9 +145,9 @@ Tap a panel and a sheet slides up with the details. The picture at the top shows
 A smart plug glows while it's drawing power and a battery is filled to its level. For climate, it's a
 frost crystal when the room is cold and a sun when it's warm.
 
-The window popups are a favorite in our home. The light in them is the real light outside.
-Sunlight comes in at the sun's actual height and softens under cloud. At night you get moonlight. And
-if a window is open with rain or cold on the way, the popup says so.
+The window popups are a highlight. The light in them is the real light outside. Sunlight comes in at
+the sun's actual height and softens under cloud. At night you get moonlight. And if a window is open
+with rain or cold on the way, the popup says so.
 
 <p align="center">
   <img src="docs/images/popups.png" alt="Three popups in full: a smart plug with its energy record, a room's climate with the last 24 hours, and every window in the home at night" width="720">
@@ -336,14 +336,15 @@ There are 22 cards in 14 groups. Each group has its own page, and tapping a pict
 ## Full example dashboard
 
 If you want the whole thing, [Build a dashboard from scratch](docs/build-a-dashboard.md) takes you
-through it one card at a time. You start with a new, empty dashboard and my dark background. Next is
-the home page, and then a page for each room, until you have the dashboard in these pictures. Every
-step has a block to copy and a picture of what you should end up with. You don't need to know YAML.
+through it one card at a time. You start with a new, empty dashboard and the dark background. Next
+is the home page, and then a page for each room, until you have the dashboard in these pictures.
+Every step has a block to copy and a picture of what you should end up with. You don't need to know
+YAML.
 
 ## What you need
 
-You need Home Assistant 2026.9 or later. I designed the cards for a phone first and everything is
-checked at 375 pixels wide, but they're perfectly happy in a desktop browser too. Bubble Card and
+You need Home Assistant 2026.9 or later. The cards were designed to be phone-first, and everything
+is checked at 375 pixels wide, but they're perfectly happy in a desktop browser too. Bubble Card and
 mini-graph-card are optional. See [Companion cards](docs/companions.md) for more about them.
 
 A couple of the cards depend on a particular integration. The weather warnings were built around the
@@ -356,7 +357,8 @@ instead.
 
 - [Getting started](docs/getting-started.md) covers installing, the picture folders, and your first
   panel and popup.
-- [Build a dashboard from scratch](docs/build-a-dashboard.md) goes through my whole dashboard, step by step.
+- [Build a dashboard from scratch](docs/build-a-dashboard.md) goes through the whole example
+  dashboard, step by step.
 - [How it works](docs/how-it-works.md) explains panels, light, accent colors and popups.
 - [Styling](docs/styling.md) has the color palette, and shows you how to change the look.
 - [Weather sensors](docs/weather-sensors.md) is about what the weather cards read. It includes a full
@@ -365,9 +367,9 @@ instead.
 
 ## About the pictures
 
-The weather card has 28 sky pictures. They were all made with an AI image generator (ChatGPT) and then
-cut to size, and I would rather be upfront about that. The window pictures are drawn by a program. The
-room in the banner is a small scene made in Blender, though the two cards on its wall are real
+The weather card has 28 sky pictures. They were all made with an AI image generator (ChatGPT) and
+then cut to size, which is worth being upfront about. The window pictures are drawn by a program.
+The room in the banner is a small scene made in Blender, though the two cards on its wall are real
 screenshots. Everything else is drawn in code by the cards themselves.
 
 ## Licence

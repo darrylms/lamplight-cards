@@ -142,12 +142,12 @@ See [Getting started](getting-started.md#your-first-popup) for how to make one, 
 ## Names and icons
 
 Most cards take their name and icon from the entity, as Home Assistant's own cards do. If your
-household calls something by another name, set `name:` and `icon:` yourself. I think the words on
-the screen should be the ones your family actually says.
+household calls something by another name, set `name:` and `icon:` yourself. The words on the screen
+should be the ones your family actually says.
 
 ## Made for a phone
 
-I designed Lamplight for a phone first, and everything is checked on a screen 375 pixels wide. It
+Lamplight was designed to be phone-first, and everything is checked on a screen 375 pixels wide. It
 looks best in a single column. To keep your last card clear of the phone's bottom bar, add a spacer
 at the foot of the view:
 
