@@ -190,19 +190,22 @@ open, the first line names it. If the weather is good, it adds how long it will 
 These are the same four evening states for the whole home:
 
 <p align="center">
-  <img src="../images/windows-house-states.png" alt="The whole-home windows popup four times: all closed; the lounge left window open on a mild evening, dry until 02:00; open with a cold band; and open with an amber wind warning band" width="560">
+  <img src="../images/windows-house-states.png" alt="The whole-home windows popup four times: all closed; the lounge left window open on a mild evening, dry until 05:00; open with a cold band; and open with an amber wind warning band" width="560">
 </p>
 
 ### The weather in the window popups
 
 The window popups show you the weather outside, and they are one of the best parts of Lamplight.
 
-The picture at the top has the light from outside. On the whole-home popup, sunlight falls into the
-room at the sun's real height and turns golden near sunset. At night there is moonlight, with the
-actual moon phase for that night.
+The picture at the top has the light from outside. On the whole-home popup you look into a room with
+a tree right outside the window, and the weather comes in through its leaves. When it's sunny the sun
+shines through and lays its light across the floor. It turns golden near sunset. On a grey day there's
+no sun and the room goes soft and dim. Rain leaves drops on the glass and fog mists the panes. Snow
+piles up on the sill. At night the moon peeks through the leaves in its real phase, as long as the sky
+is clear.
 
 <p align="center">
-  <img src="../images/window-weather-house.png" alt="The top of the whole-home windows popup by day, with sunlight falling through the window, and at night, with moonlight" width="560">
+  <img src="../images/window-weather-house.png" alt="The top of the whole-home windows popup three times: sun through the leaves on a clear day, raindrops on the glass and a dim grey room when it rains, and the moon through the leaves on a clear night" width="760">
 </p>
 
 On a room's popup you look out through the window panes at the sky. When it's clear, or there are

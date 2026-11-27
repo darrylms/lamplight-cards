@@ -135,6 +135,10 @@ class LampPopup extends HTMLElement {
     this._heroPlates = this._hero && (this._hero.form === 'sun' || this._hero.form === 'panes') ? plates : null;
     // Load both now, so that the first opening of the sheet does not show the drawing first.
     if (this._heroPlates) { lampHeroImage(this._heroPlates.day); lampHeroImage(this._heroPlates.night); }
+    // The House picture with the weather (option 6d, see LAMP_HERO_WX in 93-popup-glyphs.js): only with the cards' own
+    // plates. Header images of one's own keep the plain day and night picture.
+    this._heroWx = this._hero && this._hero.form === 'sun' && hp === undefined ? LAMP_SKY_BASE + 'lamplight-windows/' + LAMP_HERO_WX_SET + '/' : null;
+    if (this._heroWx) ['room-day-sun.webp', 'room-day-grey.webp', 'room-night-sun.webp', 'room-night-grey.webp'].forEach((n) => lampHeroImage(this._heroWx + n));
     this._heroKey = null;
     this._heroData = null;
     this._heroBusy = false;
@@ -610,12 +614,24 @@ class LampPopup extends HTMLElement {
           : 'e' + Math.round(elev * 2);
         const plate = this._heroPlates ? (night ? this._heroPlates.night : this._heroPlates.day) : null;
         if (plate && !this._onPlate) this._onPlate = () => { this._heroKey = null; if (this._open) this._paintHero(); };
+        // The weather (27 Nov 2026, option 6d of design-docs/windows_house_sky_options.html): the House card's weather
+        // entity gives the sky; the picture's light, glass and marks follow it. While its files load, the plain plate draws.
+        let wx = null;
+        if (this._heroWx) {
+          const wxId = this._config.weather || c.weather || Object.keys(hass.states).filter((id) => id.indexOf('weather.') === 0)[0];
+          const ws = wxId ? hass.states[wxId] : null;
+          if (ws) {
+            wx = lampHeroWxPick(this._heroWx, ws.state, Math.round(elev * 2) / 2, night);
+            const all = wx.files.map((u) => lampHeroImage(u, this._onPlate));
+            if (all.indexOf(false) >= 0) wx = null;
+          }
+        }
         const painted = plate ? lampHeroImage(plate, this._onPlate) : false;
         const tEnd = Math.round(this._titleEnd()), text = this._textInk();
         const ink = text.map((b) => [b.l, b.r, b.t, b.b].map(Math.round).join(',')).join(';');
-        key = [W, left, 'sun', night ? 1 : 0, step, open ? 1 : 0, painted ? plate + '|' + ink : ''].join('|');
+        key = [W, left, 'sun', night ? 1 : 0, step, open ? 1 : 0, painted ? plate + '|' + ink : '', wx ? wx.key : ''].join('|');
         const light = { frac: frac, elev: elev, night: night, open: open, phase: moon.phase, waning: moon.waning };
-        make = painted ? () => lampHeroPlate(Object.assign(o, light, { url: plate, tEnd: tEnd, text: text })) : () => lampHeroSun(Object.assign(o, light));
+        make = painted ? () => lampHeroPlate(Object.assign(o, light, { url: plate, tEnd: tEnd, text: text, wx: wx })) : () => lampHeroSun(Object.assign(o, light));
       }
     }
     if (key === this._heroKey) return;
