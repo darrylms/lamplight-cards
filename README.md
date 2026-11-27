@@ -200,101 +200,104 @@ still works and still looks finished.
 
 ## The cards
 
-There are 22 cards in 14 groups. Each group has its own page, and tapping a picture will take you there.
+There are 22 cards in 14 groups, and each group has its own page. Tap a picture to go there.
+I've sorted them by where they usually end up on a dashboard.
+
+### On the home page
 
 <table>
   <tr>
-    <td align="center" valign="top" width="33%">
-      <a href="docs/cards/weather.md"><img src="docs/images/weather-day.png" alt="The weather card on a sunny day" width="240"></a><br>
+    <td align="center" valign="top" width="50%">
+      <a href="docs/cards/weather.md"><img src="docs/images/tiles/weather.webp" alt="The weather card on a sunny day, with the Today popup behind it" width="360"></a><br>
       <b><a href="docs/cards/weather.md">Weather</a></b><br>
-      <sub>The painted sky and forecast, and the Today popup</sub><br>
-      <sub><code>lamplight-weather</code> <code>lamplight-day</code></sub>
+      <sub>The painted sky and forecast, and the Today popup</sub>
     </td>
-    <td align="center" valign="top" width="33%">
-      <a href="docs/cards/climate.md"><img src="docs/images/guide-climate.png" alt="A climate panel" width="240"></a><br>
-      <b><a href="docs/cards/climate.md">Climate</a></b><br>
-      <sub>Temperature, humidity and comfort, with a popup that explains them</sub><br>
-      <sub><code>lamplight-climate</code> <code>lamplight-climate-detail</code></sub>
-    </td>
-    <td align="center" valign="top" width="33%">
-      <a href="docs/cards/lights.md"><img src="docs/images/light-states-2.png" alt="A light row, on in warm white" width="240"></a><br>
-      <b><a href="docs/cards/lights.md">Lights</a></b><br>
-      <sub>A light with its brightness and color, and a list of scenes</sub><br>
-      <sub><code>lamplight-light</code> <code>lamplight-scenes</code></sub>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" valign="top" width="33%">
-      <a href="docs/cards/rooms.md"><img src="docs/images/rooms.png" alt="The rooms card" width="240"></a><br>
+    <td align="center" valign="top" width="50%">
+      <a href="docs/cards/rooms.md"><img src="docs/images/tiles/rooms.webp" alt="The rooms card, with three rooms lit" width="360"></a><br>
       <b><a href="docs/cards/rooms.md">Rooms</a></b><br>
-      <sub>Every room at a glance: lights, temperature, humidity, open windows</sub><br>
-      <sub><code>lamplight-rooms</code></sub>
-    </td>
-    <td align="center" valign="top" width="33%">
-      <a href="docs/cards/rows.md"><img src="docs/images/row-states.png" alt="Four kinds of row" width="240"></a><br>
-      <b><a href="docs/cards/rows.md">Rows</a></b><br>
-      <sub>A simple row for a plug, a fan, a script or a window sensor</sub><br>
-      <sub><code>lamplight-row</code></sub>
-    </td>
-    <td align="center" valign="top" width="33%">
-      <a href="docs/cards/panel.md"><img src="docs/images/light-follows.png" alt="A lights panel, one lamp on and then three" width="240"></a><br>
-      <b><a href="docs/cards/panel.md">The panel</a></b><br>
-      <sub>The glowing panel that holds your other cards</sub><br>
-      <sub><code>lamplight-panel</code> <code>lamplight-strips</code> <code>lamplight-spacer</code></sub>
+      <sub>Every room at a glance: lights, temperature, humidity, open windows</sub>
     </td>
   </tr>
   <tr>
-    <td align="center" valign="top" width="33%">
-      <a href="docs/cards/room-header.md"><img src="docs/images/header.png" alt="A room header with the lights on and off" width="240"></a><br>
-      <b><a href="docs/cards/room-header.md">Room header</a></b><br>
-      <sub>The top of a room's page, with a glow when a lamp is on</sub><br>
-      <sub><code>lamplight-header</code></sub>
-    </td>
-    <td align="center" valign="top" width="33%">
-      <a href="docs/cards/waste.md"><img src="docs/images/waste.png" alt="The waste card on bin night" width="240"></a><br>
-      <b><a href="docs/cards/waste.md">Waste</a></b><br>
-      <sub>Which bin goes out next, and when</sub><br>
-      <sub><code>lamplight-waste</code></sub>
-    </td>
-    <td align="center" valign="top" width="33%">
-      <a href="docs/cards/popups.md"><img src="docs/images/popups.png" alt="Three popups" width="240"></a><br>
-      <b><a href="docs/cards/popups.md">Popups</a></b><br>
-      <sub>The sliding sheet itself, and the popup for air purifiers</sub><br>
-      <sub><code>lamplight-popup</code> <code>lamplight-purifier-detail</code></sub>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" valign="top" width="33%">
-      <a href="docs/cards/house-scenes.md"><img src="docs/images/house-scenes.png" alt="The house scenes panel" width="240"></a><br>
+    <td align="center" valign="top" width="50%">
+      <a href="docs/cards/house-scenes.md"><img src="docs/images/tiles/scenes.webp" alt="The house scenes panel, with Morning lit" width="360"></a><br>
       <b><a href="docs/cards/house-scenes.md">House scenes</a></b><br>
-      <sub>Your scenes and routines as a row of lamps</sub><br>
-      <sub><code>lamplight-routines</code></sub>
+      <sub>Your scenes and routines as a row of lamps</sub>
     </td>
-    <td align="center" valign="top" width="33%">
-      <a href="docs/cards/smart-plugs.md"><img src="docs/images/plug-popup.png" alt="A smart plug popup" width="240"></a><br>
-      <b><a href="docs/cards/smart-plugs.md">Smart plugs</a></b><br>
-      <sub>The power now, whether that's usual, and the energy record</sub><br>
-      <sub><code>lamplight-plug-detail</code></sub>
-    </td>
-    <td align="center" valign="top" width="33%">
-      <a href="docs/cards/chips.md"><img src="docs/images/chips.png" alt="Three chips at the foot of a panel" width="240"></a><br>
-      <b><a href="docs/cards/chips.md">Chips</a></b><br>
-      <sub>A row of small buttons for the things you do most</sub><br>
-      <sub><code>lamplight-chips</code></sub>
+    <td align="center" valign="top" width="50%">
+      <a href="docs/cards/waste.md"><img src="docs/images/tiles/waste.webp" alt="The waste card the day before a collection" width="360"></a><br>
+      <b><a href="docs/cards/waste.md">Waste</a></b><br>
+      <sub>Which bin goes out next, and when</sub>
     </td>
   </tr>
   <tr>
-    <td align="center" valign="top" width="33%">
-      <a href="docs/cards/batteries.md"><img src="docs/images/battery-strip.png" alt="A batteries panel" width="240"></a><br>
+    <td align="center" valign="top" width="50%">
+      <a href="docs/cards/batteries.md"><img src="docs/images/tiles/batteries.webp" alt="The batteries panel at 32%, with the batteries popup behind it" width="360"></a><br>
       <b><a href="docs/cards/batteries.md">Batteries</a></b><br>
-      <sub>A small panel and a popup that lists every battery</sub><br>
-      <sub><code>lamplight-battery-strip</code> <code>lamplight-batteries</code></sub>
+      <sub>A small panel and a popup that lists every battery</sub>
     </td>
-    <td align="center" valign="top" width="33%">
-      <a href="docs/cards/windows.md"><img src="docs/images/guide-windows.png" alt="A windows panel" width="240"></a><br>
+    <td align="center" valign="top" width="50%">
+      <a href="docs/cards/windows.md"><img src="docs/images/tiles/windows.webp" alt="The bedroom windows panel, with its popup behind it showing the night sky in the window" width="360"></a><br>
       <b><a href="docs/cards/windows.md">Windows</a></b><br>
-      <sub>A small panel, and popups with the weather outside</sub><br>
-      <sub><code>lamplight-window-strip</code> <code>lamplight-windows-detail</code></sub>
+      <sub>A small panel, and popups with the weather outside</sub>
+    </td>
+  </tr>
+</table>
+
+### On a room's page
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%">
+      <a href="docs/cards/room-header.md"><img src="docs/images/tiles/header.webp" alt="A room header for the bathroom, with a glow along its foot" width="360"></a><br>
+      <b><a href="docs/cards/room-header.md">Room header</a></b><br>
+      <sub>The top of a room's page, with a glow when a lamp is on</sub>
+    </td>
+    <td align="center" valign="top" width="50%">
+      <a href="docs/cards/panel.md"><img src="docs/images/tiles/panel.webp" alt="A lights panel with its lamps on" width="360"></a><br>
+      <b><a href="docs/cards/panel.md">The panel</a></b><br>
+      <sub>The glowing panel that holds your other cards</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="50%">
+      <a href="docs/cards/lights.md"><img src="docs/images/tiles/lights.webp" alt="A light row, on in warm white, with its brightness slider" width="360"></a><br>
+      <b><a href="docs/cards/lights.md">Lights</a></b><br>
+      <sub>A light with its brightness and color, and a list of scenes</sub>
+    </td>
+    <td align="center" valign="top" width="50%">
+      <a href="docs/cards/rows.md"><img src="docs/images/tiles/rows.webp" alt="Rows for a modem, an air purifier and a script" width="360"></a><br>
+      <b><a href="docs/cards/rows.md">Rows</a></b><br>
+      <sub>A simple row for a plug, a fan, a script or a window sensor</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="50%">
+      <a href="docs/cards/climate.md"><img src="docs/images/tiles/climate.webp" alt="The climate panel, with the climate popup behind it" width="360"></a><br>
+      <b><a href="docs/cards/climate.md">Climate</a></b><br>
+      <sub>Temperature, humidity and comfort, with a popup that explains them</sub>
+    </td>
+    <td align="center" valign="top" width="50%">
+      <a href="docs/cards/chips.md"><img src="docs/images/tiles/chips.webp" alt="Three chips at the foot of a panel" width="360"></a><br>
+      <b><a href="docs/cards/chips.md">Chips</a></b><br>
+      <sub>A row of small buttons for the things you do most</sub>
+    </td>
+  </tr>
+</table>
+
+### In a popup
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%">
+      <a href="docs/cards/popups.md"><img src="docs/images/tiles/popups.webp" alt="Two popups side by side: a network plug and a room climate" width="360"></a><br>
+      <b><a href="docs/cards/popups.md">Popups</a></b><br>
+      <sub>The sliding sheet itself, and the popup for air purifiers</sub>
+    </td>
+    <td align="center" valign="top" width="50%">
+      <a href="docs/cards/smart-plugs.md"><img src="docs/images/tiles/plugs.webp" alt="A smart plug popup for the modem, with its energy record" width="360"></a><br>
+      <b><a href="docs/cards/smart-plugs.md">Smart plugs</a></b><br>
+      <sub>The power now, whether that's usual, and the energy record</sub>
     </td>
   </tr>
 </table>
