@@ -22,7 +22,7 @@
 // deeper glass foot of 0.128.0-dev (below).
 //
 // THE GLASS (0.120.0-dev): option 8 "One Smooth Curve" of design-docs/weather_glass_options.html,
-// chosen by the household on 16 November 2026. The plates-2 files are 1536 x 960, so the plate
+// chosen by the household on 16 November 2026. The plate files are 1536 x 960, so the plate
 // covers the card. The tint is thick only where the words need it: for each text role, the card
 // finds the least tint that gives its floor + 0.05 on the brightest pixels of the plate behind it
 // (lampPlateGlass). Each role gets a soft ramp from y 36 to the top of its box. The tint is the
@@ -39,9 +39,14 @@
 // with the larger weight is the base. The other plate lies on top at w2 / (w1 + w2).
 // The ground counts as sky for Law 05.2.
 
-const LAMP_PLATE_SET = 'plates-2';
+// plates-3 (0.155.0-dev, 27 November 2026): new fair and clear plates (day, golden, twilight) with a deep
+// lower sky, made by the household from design-docs/weather_plates/plates3_brief.md. On the old plates
+// the sky was light under the words, so the glass was thick (0.6 to 0.76) on a partly cloudy or sunny day.
+// Now it is at or near its minimum. The other 22 files are the plates-2 files (tools/plates3_build.py).
+// The room window sheets show the same plates through their glass, by the household's choice.
+const LAMP_PLATE_SET = 'plates-3';
 // The horizon row, as a share of the plate's width: the 80% row of the 1536 x 512 plates-1 files.
-// It places the 1536 x 960 plates-2 files in the same way.
+// It places the 1536 x 960 plates-2 and plates-3 files in the same way.
 const LAMP_PLATE_ROW = 0.8 * 512 / 1536;
 // The glass (option 8). blur: px; steps: [share of the blur, mask from y, mask to y]; y0: where
 // each role's ramp starts; min, minTo: the least tint and where the minimum ramp ends; sig: the
