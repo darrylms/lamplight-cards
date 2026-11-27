@@ -67,17 +67,13 @@ warms up. You can see which lights are lit before you scan the text.
   <img src="docs/images/light-follows.png" alt="The same lights panel twice: one lamp on at the bottom, then all three on. The sliders have the optional slider lock" width="640">
 </p>
 
-You can give each room has its own accent color and the glow uses it. That way no two rooms feel quite the same. These
-are the hallway, study, bathroom and bedroom on the dashboard in these pictures, with the lights on:
+You can give each room its own accent color and the glow picks it up, so no two rooms feel quite the
+same. Each room gets its own panels too. In this picture the lounge has an air purifier, the study puts
+its smart plugs at the top, and the bedroom shows its windows. The hallway just has its lights.
 
-<table>
-  <tr>
-    <td valign="top"><img src="docs/images/room-hallway.png" alt="The hallway page with the lights on, glowing blue" width="200"></td>
-    <td valign="top"><img src="docs/images/room-study.png" alt="The study page with the lights on, glowing purple" width="200"></td>
-    <td valign="top"><img src="docs/images/room-bathroom.png" alt="The bathroom page with the lights on, glowing teal" width="200"></td>
-    <td valign="top"><img src="docs/images/room-bedroom.png" alt="The bedroom page with the lights on, glowing pink" width="200"></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="docs/images/rooms-accents-fan.png" alt="Four room pages fanned out in a row, each with its own glow: the lounge in amber with an air purifier, the study in purple with smart plugs above the lights, the bedroom in pink with its windows, and the hallway in blue with its lights" width="800">
+</p>
 
 ### Unified look and feel
 
