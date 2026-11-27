@@ -1499,7 +1499,7 @@ const LAMP_HERO_FADE_EASE = [[0, 1], [0.15, 0.97], [0.3, 0.88], [0.45, 0.72], [0
 // - drops on the glass in rain and thunder, snow on the panes and the sill, mist in fog;
 // - by night the moon shows only where the light shows through the leaves (moon-mask.png), with a soft glow round it.
 // The elevation tint follows the sun's share: none under cloud. File px: glass 818-1012 x 75-277, marks 780-1054 x 45-311.
-const LAMP_HERO_WX_SET = '4';
+const LAMP_HERO_WX_SET = '7';
 const LAMP_HERO_WX = { file: [1270, 423], glass: [818, 75, 194, 202], marks: [780, 45, 274, 266], sun: { clear: 1, fair: 0.6 },
   mark: { rain: 'rain', thunder: 'rain', snow: 'snow', fog: 'fog' }, glow: 0.3 };
 function lampHeroWxPick(base, state, elev, night) {

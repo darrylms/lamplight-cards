@@ -190,7 +190,7 @@ open, the first line names it. If the weather is good, it adds how long it will 
 These are the same four evening states for the whole home:
 
 <p align="center">
-  <img src="../images/windows-house-states.png" alt="The whole-home windows popup four times: all closed; the lounge left window open on a mild evening, dry until 02:00; open with a cold band; and open with an amber wind warning band" width="560">
+  <img src="../images/windows-house-states.png" alt="The whole-home windows popup four times: all closed; the lounge left window open on a mild evening, dry until 05:00; open with a cold band; and open with an amber wind warning band" width="560">
 </p>
 
 ### The weather in the window popups
@@ -205,7 +205,7 @@ piles up on the sill. At night the moon peeks through the leaves in its real pha
 is clear.
 
 <p align="center">
-  <img src="../images/window-weather-house.png" alt="The top of the whole-home windows popup by day, with sunlight falling through the window, and at night, with moonlight" width="560">
+  <img src="../images/window-weather-house.png" alt="The top of the whole-home windows popup three times: sun through the leaves on a clear day, raindrops on the glass and a dim grey room when it rains, and the moon through the leaves on a clear night" width="760">
 </p>
 
 On a room's popup you look out through the window panes at the sky. When it's clear, or there are
