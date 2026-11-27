@@ -190,11 +190,11 @@ Add the batteries card and it will find every battery in your home by itself. Th
 list to keep up to date.
 
 <p align="center">
-  <img src="docs/images/strips.png" alt="The batteries panel showing its lowest battery, the Lounge dimmer at 33%" width="375"><br>
+  <img src="docs/images/battery-strip.png" alt="The batteries panel on its own, showing its lowest battery: the Lounge dimmer at 32%" width="186"><br>
   <img src="docs/images/batteries-popup.png" alt="The batteries popup listing all 18 batteries: one worth noticing, nine fine and eight at full" width="300">
 </p>
 
-### No plugins needed but they do enhance some features
+### No dashboard plugins needed but they do enhance some features
 
 Lamplight works without any other plugins. If you already use
 [Bubble Card](https://github.com/Clooos/Bubble-Card) or
@@ -289,7 +289,7 @@ There are 22 cards in 14 groups. Each group has its own page, and tapping a pict
   </tr>
   <tr>
     <td align="center" valign="top" width="33%">
-      <a href="docs/cards/batteries.md"><img src="docs/images/strips.png" alt="The battery and window strips" width="240"></a><br>
+      <a href="docs/cards/batteries.md"><img src="docs/images/battery-strip.png" alt="A batteries panel" width="240"></a><br>
       <b><a href="docs/cards/batteries.md">Batteries</a></b><br>
       <sub>A small panel and a popup that lists every battery</sub><br>
       <sub><code>lamplight-battery-strip</code> <code>lamplight-batteries</code></sub>

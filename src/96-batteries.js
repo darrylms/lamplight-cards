@@ -94,7 +94,7 @@ const LAMP_BATT_TILE_RGB = LAMP_MEANINGS.battery;
 const LAMP_BATT_LAMP_S = { alert: 1, notice: 0.6, hand: 0.3, full: 0.3 };
 
 // THE BATTERY GAUGE (option 4 of design-docs/footer_refresh_options.html, 25 Nov 2026, 0.152.0-dev).
-// An outline battery, 30 x 52px, filled to the level of the lowest battery in its band colour. The
+// An outline battery, 30 x 52 units (shown at 75%, LAMP_GAUGE_SCALE in src/21-strip.js), filled to the level of the lowest battery in its band colour. The
 // fill is lighter at the top, with a bright line at the top of the charge and a soft glow of its own
 // colour that grows with the strength s. The empty part is a faint glass. The panel's light is
 // centred on the top of the charge, so it drops as the charge drops. `id` makes the svg ids unique,
@@ -203,7 +203,7 @@ class LampBatteryStrip extends LampFootPanel {
 
   _gauge() {
     const l = this._light();
-    return lampBattGauge(this._gid || 'lg', l.rgb, l.s || 0, l.v);
+    return lampGaugeScale(lampBattGauge(this._gid || 'lg', l.rgb, l.s || 0, l.v));
   }
 }
 

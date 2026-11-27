@@ -41,7 +41,7 @@ and the panel's light drops as the charge does. If a battery needs replacing the
 and the line below tells you which one. Tap the panel to open `#batteries`.
 
 <p align="center">
-  <img src="../images/strips.png" alt="The battery strip and the window strip side by side" width="375">
+  <img src="../images/battery-strip.png" alt="The batteries panel: the Lounge dimmer is the lowest at 32%, and the battery drawing is filled to the same level" width="186">
 </p>
 
 ### You need

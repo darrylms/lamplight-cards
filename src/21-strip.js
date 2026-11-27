@@ -11,9 +11,9 @@
 //   2. The accent light is centred on a point of the drawing that the subclass gives: the top of
 //      the charge, or the middle of the glass. So the light still comes from the right edge
 //      (Law 05.2), and on Batteries it drops as the charge drops. The bounce stays.
-//   3. The rim is a lit top edge: a line along the top of the card, brightest above the drawing,
-//      in the accent of the state at the strength s, with a faint glow under it (lampFootEdge).
-//      It is a border-box layer of the background (Law 05.3), and it follows the light (d-092).
+//   3. The rim is the accent family's rim, centred over the drawing, with a faint glow under the
+//      top edge (lampFootEdge, revision 4). It is a border-box layer of the background (Law 05.3),
+//      and it follows the light (d-092). The drawing is shown at 75% (LAMP_GAUGE_SCALE).
 // The strength s (0 to 1) sets the light and the edge together. A subclass gives { rgb, s } in
 // _light(): the colour and the strength.
 // Why: the glass lamp of 7 Oct 2026 measured 1.8:1 for its white glyph on its own lit glass, with a
@@ -60,19 +60,36 @@ const LAMP_FOOT_REST = LAMP_MEANINGS.panel.rest;
 // Where the drawing sits: [top, right] in px from the card's edges.
 const LAMP_GAUGE_AT = [12, 16];
 
-// THE LIT TOP EDGE (extra E, 25 Nov 2026). Two layers of the background. `edge` lies in the border box,
-// so it shows only in the card's 1px border: a wide, flat ellipse centred above the drawing at the
-// top edge, so the top border is bright there and the sides fade. `glow` lies in the padding box,
-// under the ground: a faint band of the same light just under the top edge. W is the card width,
-// x the centre of the drawing's light, rgb the accent, s the strength 0 to 1.
+// THE SIZE (option 5 "Three Quarters" of design-docs/footer_refresh_options.html, revision 4,
+// 26 Nov 2026, 0.153.0-dev). Each drawing is drawn in its own units and shown at 75%: the battery
+// 22.5 x 39px, the window 34.5 x 37.5px. At full size (0.152.0-dev) the window touched the "WINDOWS"
+// eyebrow on the household's 360px phone. lampGaugeScale() scales the size, the light point and the
+// svg's width and height; the viewBox and every stroke stay in the drawing's own units.
+const LAMP_GAUGE_SCALE = 0.75;
+
+function lampGaugeScale(g) {
+  const k = LAMP_GAUGE_SCALE, r = function (v) { return Math.round(v * k * 100) / 100; };
+  return { w: r(g.w), h: r(g.h), light: [r(g.light[0]), r(g.light[1])],
+    svg: g.svg.replace(/width="[\d.]+" height="[\d.]+"/, 'width="' + r(g.w) + '" height="' + r(g.h) + '"') };
+}
+
+// THE RIM (extra E3 "The Soft Rim", revision 4, 26 Nov 2026, 0.153.0-dev). Two layers of the background.
+// `edge` lies in the border box, so it shows only in the card's 1px border. It is the accent family's
+// edge-source rim (lampEdgeWash in src/10-wash.js): an ellipse 62% of the card wide and 123px high,
+// 6px above the top edge, peak b, b x 0.35 at 38%, b x 0.1 at the end. It is centred over the
+// drawing's light, and b = 0.30 + 0.20 s starts at the Waste panel's 0.30. `glow` lies in the padding
+// box, under the ground: a faint band of the accent just under the top edge, at 0.07 + 0.08 s.
+// W is the card width, x the centre of the drawing's light, rgb the accent, s the strength 0 to 1.
+// 0.152.0-dev had a bright top edge (0.75 + 0.25 s, the accent 55% to white) and the glow at twice
+// this strength; on the phone it was about three times as bright as any other panel's rim.
 function lampFootEdge(W, x, rgb, s) {
-  const cx = Math.round(Math.min(x, W - 24));
+  const cx = Math.round(x), b = 0.30 + 0.20 * s;
+  const B = function (k) { return lampNum(lampRound(b * k, 4)); };
   return {
-    edge: 'radial-gradient(ellipse ' + Math.round(W) + 'px 56px at ' + cx + 'px 0px, rgba(' +
-      lampMix(rgb, '255,255,255', 0.55) + ',' + lampNum(lampRound(0.75 + 0.25 * s, 3)) + ') 0%, rgba(' + rgb + ',' +
-      lampNum(lampRound(0.30 + 0.25 * s, 3)) + ') 40%, rgba(' + rgb + ',0.05) 100%) border-box',
+    edge: 'radial-gradient(' + Math.round(W * 0.62) + 'px 123px at ' + cx + 'px -6px, rgba(' + rgb + ',' + B(1) +
+      ') 0%, rgba(' + rgb + ',' + B(0.35) + ') 38%, rgba(' + rgb + ',' + B(0.1) + ') 100%) border-box',
     glow: 'radial-gradient(ellipse ' + Math.round(W * 0.8) + 'px 22px at ' + cx + 'px 0px, rgba(' + rgb + ',' +
-      lampNum(lampRound(0.14 + 0.16 * s, 3)) + ') 0%, rgba(' + rgb + ',0) 100%) padding-box'
+      lampNum(lampRound(0.07 + 0.08 * s, 3)) + ') 0%, rgba(' + rgb + ',0) 100%) padding-box'
   };
 }
 

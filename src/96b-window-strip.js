@@ -49,7 +49,7 @@
 const LAMP_WIN_SKY = LAMP_MEANINGS.window.open;
 
 // THE WINDOW GAUGE (option 4 of design-docs/footer_refresh_options.html, 25 Nov 2026, 0.152.0-dev).
-// A two-casement window, 46 x 50px with its sill, drawn as the household's reference pictures draw
+// A two-casement window, 46 x 50 units with its sill (shown at 75%, LAMP_GAUGE_SCALE in src/21-strip.js), drawn as the household's reference pictures draw
 // one. Each frame part is a small bar with a lit top-left edge, a shaded face and a dark bottom-right
 // edge: the outer frame, the sash frame, the centre bar and the sill. A dark gap lies between the
 // outer frame and the sash frame. The glass is dark, and one wide diagonal sheen with a crisp lower
@@ -430,7 +430,7 @@ class LampWindowStrip extends LampFootPanel {
 
   _gauge() {
     const l = this._light();
-    return lampWinGauge(this._gid || 'lg', l.rgb, !!l.open);
+    return lampGaugeScale(lampWinGauge(this._gid || 'lg', l.rgb, !!l.open));
   }
 }
 
