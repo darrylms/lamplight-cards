@@ -305,10 +305,9 @@ I've sorted them by where they usually end up on a dashboard.
 ## Quick start
 
 1. In Home Assistant, go to **Settings > Marketplace** and select **Add from link**.
-   Enter `OWNER/lamplight-cards`, choose **Dashboards** if it asks for a type, and select **Add**.
+   Enter `darrylms/lamplight-cards`, choose **Dashboards** if it asks for a type, and select **Add**.
    Then open **Lamplight Cards**, select **Install** and reload your browser. The Marketplace copies
    the cards and their pictures and adds the dashboard resource for you.
-   <!-- TODO: replace OWNER with the GitHub account, when the repository exists. -->
 
    If you are on Home Assistant 2026.10 or earlier, use HACS in the same way. To install it by hand
    instead, follow the steps in [Getting started](docs/getting-started.md).
