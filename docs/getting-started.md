@@ -22,9 +22,8 @@ Marketplace. It's by far the easiest.
    The first time you open it, Home Assistant shows a warning about community content. Read it and
    accept it.
 2. Select **Add from link** in the top-right corner.
-3. Enter `OWNER/lamplight-cards` and select **Add**.
+3. Enter `darrylms/lamplight-cards` and select **Add**.
    If Home Assistant asks for the type, choose **Dashboards** and select **Add** again.
-   <!-- TODO: replace OWNER with the GitHub account, when the repository exists. -->
 4. Open **Lamplight Cards** and select **Install**. Check the version, then select **Install** again.
 5. Reload your browser.
 
@@ -38,7 +37,7 @@ resource for you. There is nothing else to do.
 ### With HACS (Home Assistant 2026.10 and earlier)
 
 1. Open **HACS** and select the three dots in the top-right corner, then **Custom repositories**.
-2. Enter `OWNER/lamplight-cards`, choose the type **Dashboard**, and select **Add**.
+2. Enter `darrylms/lamplight-cards`, choose the type **Dashboard**, and select **Add**.
 3. Find **Lamplight Cards**, select **Download**, then reload your browser.
 
 ### By hand
