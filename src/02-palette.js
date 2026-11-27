@@ -101,7 +101,9 @@ const LAMP_MEANINGS = {
   // Which way the air feels on #today: periwinkle colder, warm amber warmer (29 Oct 2026).
   felt: { colder: '172,166,250', warmer: '240,180,120' },
   // The humidity ramp: dry, middle, wet. Three [r, g, b] stops, not one colour.
-  humidity: { ramp: [[107, 143, 166], [82, 191, 230], [69, 209, 250]] },
+  // The dry stop is silver, OKLCH L 0.75 C 0.025 h 240: the lightness of the middle stop, with
+  // almost no colour. Until 0.156.0-dev it was 107,143,166 (L 0.63), too faint under 50%.
+  humidity: { ramp: [[160, 176, 188], [82, 191, 230], [69, 209, 250]] },
   // WEATHER STATUS (§11). The CAP severity scale, not a provider's words. lampWeatherStatus()
   // turns the provider's level into a status. The screen keeps the provider's own words.
   // Two sets, by the household's decision of 22 Nov 2026:
