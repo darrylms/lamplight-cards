@@ -85,6 +85,7 @@ You can use these names anywhere that a color is asked for. Write them with a hy
 |---|---|---|
 | `window-open` | A window is open | 60,200,235 |
 | `comfort-cool`, `comfort-comfortable`, `comfort-warm` | A room is cool, comfortable or warm | 90,150,245 · 78,200,130 · 235,120,70 |
+| `comfort-humid`, `comfort-dry` | The temperature's fine but the air is humid or dry. These are the two ends of the humidity color | 69,209,250 · 160,176,188 |
 | `felt-colder`, `felt-warmer` | It feels colder or warmer outside than the thermometer says | 172,166,250 · 240,180,120 |
 | `battery-alert`, `battery-notice`, `battery-hand`, `battery-full` | Replace soon, worth noticing, fine, full | 235,120,70 · 232,195,74 · 78,200,130 · 78,200,130 |
 | `filter-alert`, `filter-notice`, `filter-hand` | An air filter needs changing soon, is worth noticing, is fine | 235,120,70 · 232,195,74 · 78,200,130 |

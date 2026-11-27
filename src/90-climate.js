@@ -71,6 +71,19 @@
 // The history is read when the card connects and every 10 minutes; a new reading that goes past the
 // low or the high moves it at once, and moves the right end of the wave.
 //
+// THE COMFORT WORD (27 Nov 2026, design-docs/climate_comfort_options.html, option 2 "Two Facts, One Line")
+// It says the temperature and the humidity together. The temperature gives Cool, Comfortable or Warm
+// (comfort_range). The humidity is out of range from damp_range[1] (70%, where the drop starts to
+// glow) and under dry_below (40%). Then:
+//     temperature in range       "Humid" or "Dry", in the humidity ramp's wet or dry colour
+//     temperature out of range   "Cool and humid", "Warm and dry" ..., in the temperature word's colour
+// "Comfortable" means both readings are in range. Measured over 7 days (27 Nov 2026): the dew point
+// is 7.6 to 9.0 degrees in every room, so a humid room here is a cold room, and "Cool and humid" is
+// the common case (Bathroom 13 h, Bedroom 5 h a week). No room went under 40%. A humidity index
+// (apparent temperature) was measured and not offered: it moves the Cool line by about 1.3 degrees
+// at 16.5 and still does not say the humidity. The sheet's header picture stays on temperature.
+// An unavailable humidity gives the temperature word alone.
+//
 // THE COMFORT WORD DEFAULTS TO "COMFORTABLE" WHEN THE SENSOR HAS NO READING
 // Ported from the live template, on purpose. `parseFloat` of a missing or unavailable state is
 // `NaN`, and `NaN < lo` and `NaN > hi` are both false, so the word falls through to the middle word
@@ -83,12 +96,17 @@
 //                   lamplight-light rows use (Bedroom 235,110,180). Default '90,150,245'
 //   comfort_range   [18, 25]. Below the low end reads "Cool", above the high end "Warm",
 //                   between them "Comfortable"
-//   comfort_colors  {cool, warm, comfortable}. Defaults '90,150,245', '235,120,70', '78,200,130'
-//   comfort_words   {cool, warm, comfortable}. Defaults 'Cool', 'Warm', 'Comfortable'
+//   dry_below       40. Under this humidity the word says dry. Humid starts at damp_range[1]
+//   comfort_colors  {cool, warm, comfortable, humid, dry}. Defaults '90,150,245', '235,120,70',
+//                   '78,200,130', '69,209,250', '160,176,188'
+//   comfort_words   {cool, warm, comfortable, humid, dry, and}. Defaults 'Cool', 'Warm',
+//                   'Comfortable', 'Humid', 'Dry', 'and'. A two-part word is cool + and + humid,
+//                   with the humidity word in lower case
 //   humidity_range  [45, 65]. The dry and wet ends of the humidity colour ramp
 //   humidity_colors three rgb triples: dry, middle, wet. The middle sits at 0.55 of the ramp,
 //                   the same break lamplight-rooms uses
-//   damp_range      [60, 70], as on lamplight-climate-detail. The drop glows from the second value
+//   damp_range      [60, 70], as on lamplight-climate-detail. The drop glows from the second value,
+//                   and the comfort word says humid from it
 //   hot_icon_color  "r,g,b". The sun. Default: white with 20% of the accent
 //   cold_icon_color "r,g,b". The frost. Default: the same
 //   humid_icon_color "r,g,b". The drop. Default: the same. Each icon is drawn at 56% opacity
@@ -98,7 +116,7 @@
 
 const LAMP_CLIMATE_RANGE = [18, 25];
 const LAMP_CLIMATE_COLORS = LAMP_MEANINGS.comfort;
-const LAMP_CLIMATE_WORDS = { cool: 'Cool', warm: 'Warm', comfortable: 'Comfortable' };
+const LAMP_CLIMATE_WORDS = { cool: 'Cool', warm: 'Warm', comfortable: 'Comfortable', humid: 'Humid', dry: 'Dry', and: 'and' };
 const LAMP_CLIMATE_HUMIDITY_COLORS = LAMP_MEANINGS.humidity.ramp;
 // The icons: white with this part of the room accent, drawn at this opacity.
 const LAMP_CLIMATE_ICON_TINT = 0.2;
@@ -131,6 +149,17 @@ function lampClimateMix(c, d, k) {
   return c.map(function (v, i) { return Math.round(v + (d[i] - v) * k); });
 }
 function lampClimateTriple(s) { return String(s).split(',').map(Number); }
+
+// The comfort word, from the raw temperature (NaN falls through to the middle word, see above) and
+// the humidity (null: not read). lamplight-climate-detail uses it too. Returns { key, word }: `key`
+// names the colour in comfort_colors.
+function lampClimateComfort(t, h, range, damp, dryBelow, words) {
+  const tk = t < range[0] ? 'cool' : (t > range[1] ? 'warm' : 'comfortable');
+  const hk = h === null || isNaN(h) ? null : (h >= damp[1] ? 'humid' : (h < dryBelow ? 'dry' : null));
+  if (!hk) return { key: tk, word: words[tk] };
+  if (tk === 'comfortable') return { key: hk, word: words[hk] };
+  return { key: tk, word: words[tk] + ' ' + words.and + ' ' + String(words[hk]).toLowerCase() };
+}
 
 // Two straight lines through three stops, ported from the live template. Returns [r, g, b].
 function lampClimateHumidityRgb(h, ramp, colors) {
@@ -469,6 +498,7 @@ class LampClimate extends HTMLElement {
     this._ramp = lampOpt('climate', config, 'humidity_range');
     this._humColors = config.humidity_colors || LAMP_CLIMATE_HUMIDITY_COLORS;
     this._damp = Array.isArray(config.damp_range) && config.damp_range.length === 2 ? config.damp_range : lampDefault('climate', 'damp_range');
+    this._dry = lampOpt('climate', config, 'dry_below');
     const ink = lampClimateMix([255, 255, 255], this._accent, LAMP_CLIMATE_ICON_TINT);
     const icon = function (v) { return v ? lampClimateTriple(lampColour(v, 'soft')) : ink; };
     this._high = icon(config.hot_icon_color);
@@ -662,14 +692,14 @@ class LampClimate extends HTMLElement {
     this._paintWave();
   }
 
-  // The comfort state as { word, colour [r,g,b] }. Reads the raw sensor state, not `_number`'s
+  // The comfort state as { word, colour [r,g,b] }. Reads the raw temperature state, not `_number`'s
   // null - see the note at the top of this file.
   _comfort() {
     const s = this._hass.states[this._temperature];
     const t = s ? parseFloat(s.state) : NaN;
-    const lo = this._range[0], hi = this._range[1];
-    const k = t < lo ? 'cool' : (t > hi ? 'warm' : 'comfortable');
-    return { word: this._words[k], colour: lampClimateTriple(this._colors[k]) };
+    const h = this._humidity ? this._number(this._humidity) : null;
+    const k = lampClimateComfort(t, h, this._range, this._damp, this._dry, this._words);
+    return { word: k.word, colour: lampClimateTriple(this._colors[k.key]) };
   }
 
   _paintTemperature() {

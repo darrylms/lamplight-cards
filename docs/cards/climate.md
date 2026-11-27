@@ -15,9 +15,15 @@ explains the last day in plain words.
 
 ### What it does
 
-A row with the temperature now and a comfort word below it ("Cool", "Comfortable" or "Warm"). The
-humidity is on the right, with the high and low of the last 24 hours and their times. A soft wave
+A row with the temperature now and a comfort word below it. The humidity is on the right, with the
+high and low of the last 24 hours and their times. A soft wave
 along the bottom, in the room's color, traces the same 24 hours.
+
+The comfort word looks at the humidity as well as the temperature. Between 18° and 25° with normal
+humidity it says "Comfortable". Colder is "Cool" and hotter is "Warm". Once the air gets humid (70% or
+more) or dry (under 40%) the word tells you. If the temperature is fine you'll see just "Humid" or
+"Dry". If it isn't you get both, like "Cool and humid". So green only shows when the room is fine on
+both counts.
 
 This is a row and not a panel, so put it inside a [`lamplight-panel`](panel.md).
 
@@ -56,11 +62,12 @@ Give each row its room's color so that the wave matches the lights in that room.
 | `humidity` | none | The humidity sensor |
 | `accent` | `90,150,245` | The room's color, for the wave and the glow under the number |
 | `comfort_range` | `[18, 25]` | Below the first number is "Cool", above the second is "Warm" (°C) |
-| `comfort_words` | Cool, Warm, Comfortable | Your own words: `{ cool, warm, comfortable }` |
-| `comfort_colors` | the [comfort colors](../styling.md#reserved-styles) | Your own colors: `{ cool, warm, comfortable }` |
+| `dry_below` | `40` | Under this humidity the comfort word says dry (%) |
+| `comfort_words` | Cool, Warm, Comfortable, Humid, Dry, and | Your own words: `{ cool, warm, comfortable, humid, dry, and }`. A two-part word is put together as cool + and + humid |
+| `comfort_colors` | the [comfort colors](../styling.md#reserved-styles) | Your own colors: `{ cool, warm, comfortable, humid, dry }` |
 | `humidity_range` | `[45, 65]` | The dry and damp ends of the humidity color |
 | `humidity_colors` | three blues | The humidity color: dry, middle, damp |
-| `damp_range` | `[60, 70]` | The drop icon glows from the second number (%) |
+| `damp_range` | `[60, 70]` | From the second number the drop icon glows and the comfort word says humid (%) |
 | `hot_icon_color`, `cold_icon_color`, `humid_icon_color` | soft white | The colors of the sun, frost and drop icons |
 | `show_wave` | `true` | `false` hides the 24-hour wave |
 | `tap_action` | open the temperature's details | Any Home Assistant action. Point it at a popup to open the room's climate sheet |
@@ -75,6 +82,8 @@ you'll see the wave and the high and low once there is some history to draw from
 ### Tips
 
 - In a cold climate, try `comfort_range: [17, 23]`. In a warm one, `[20, 27]`.
+- Does a room read "humid" more often than you'd like? Try `damp_range: [65, 75]`. It moves the drop's
+  glow too, and on the popup the "humid" notes.
 - To open the room's climate popup from the row, add
   `tap_action: { action: navigate, navigation_path: '#living-room-climate' }`.
 
@@ -102,12 +111,12 @@ the room warms. If the air is damp, a soft mist gathers under it.
   <img src="../images/climate-popup.png" alt="A room's climate popup, with the last 24 hours drawn as a chart" width="375">
 </p>
 
-The three rooms below each have something worth a look. The bedroom is cool and a little damp, and
-colder than usual. The study is warm, and warmer than usual. The bathroom has been humid for most of
-the week, so the mist under its crystal is thicker.
+The three rooms below each have something worth a look. The bedroom is cool, and colder than usual.
+The study is warm, and warmer than usual. The bathroom has been humid for most of the week, so the
+mist under its crystal is thicker. It's at 71% right now, so its word says "Cool and humid".
 
 <p align="center">
-  <img src="../images/climate-popup-notes.png" alt="Three climate popups: a cool bedroom with a frost crystal and a Colder than usual note, a warm study with a sun and a Warmer than usual note, and a bathroom with a misty crystal and a Humid most of the week note" width="760">
+  <img src="../images/climate-popup-notes.png" alt="Three climate popups: a cool bedroom with a frost crystal and a Colder than usual note, a warm study with a sun and a Warmer than usual note, and a bathroom reading Cool and humid, with a misty crystal and a Humid most of the week note" width="760">
 </p>
 
 ### You need
@@ -150,8 +159,8 @@ cards:
 | `bedroom` | `false` | `true` for a bedroom: the nights line says how many nights were cool enough to sleep well |
 | `sleep_max_temp` | `20` | A night warmer than this on average is too warm for sleep (°C) |
 | `night_hours` | `[23, 7]` | When night starts and ends, for the shading |
-| `damp_range` | `[60, 70]` | The humidity bands for "humid" (%) |
-| `comfort_range`, `comfort_words` | as the row | The same as on `lamplight-climate` |
+| `damp_range` | `[60, 70]` | The humidity bands for "humid" (%). The comfort word says humid from the second number |
+| `comfort_range`, `comfort_words`, `dry_below` | as the row | The same as on `lamplight-climate`, so the popup and the row use the same word |
 | `graph` | none | Any card for the foot of the sheet, for example a [mini-graph-card](../companions.md#mini-graph-card-graphs-in-the-popups) |
 
 </details>

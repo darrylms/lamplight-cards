@@ -52,7 +52,9 @@
 //   outside         optional. The outdoor temperature sensor
 //   line_color      "r,g,b" | hex | rgb(). The room's line. Default white
 //   graph           optional. A whole card configuration for a mini-graph-card slot at the foot
-//   comfort_range, comfort_words   the same keys and defaults as lamplight-climate (comfort_colors is no longer read)
+//   comfort_range, comfort_words, dry_below   the same keys and defaults as lamplight-climate (comfort_colors
+//                  is no longer read). The word follows the same rule (lampClimateComfort): "Cool and humid"
+//                  from damp_range[1], "Humid" alone when the temperature is in range
 
 const LAMP_CLIMATE_DETAIL_STATS_MS = 5 * 60 * 1000;
 const LAMP_CLIMATE_DETAIL_HOUR = 3600000;
@@ -418,6 +420,7 @@ class LampClimateDetail extends HTMLElement {
     this._night = Array.isArray(config.night_hours) && config.night_hours.length === 2 ? config.night_hours : lampDefault('climate-detail', 'night_hours');
     this._range = config.comfort_range || LAMP_CLIMATE_RANGE;
     this._words = Object.assign({}, LAMP_CLIMATE_WORDS, config.comfort_words || {});
+    this._dry = lampOpt('climate-detail', config, 'dry_below');
     this._stats = null;
     this._render();
   }
@@ -593,13 +596,14 @@ class LampClimateDetail extends HTMLElement {
 
   // Now: the reading, the comfort word, the humidity. Reads the raw state for the comfort word, not
   // `_number`'s null: an unavailable sensor falls through both comparisons and reads as
-  // "Comfortable", the same quirk lamplight-climate keeps.
+  // "Comfortable", the same quirk lamplight-climate keeps. The word takes the humidity into account
+  // by lamplight-climate's rule (lampClimateComfort).
   _paintHero() {
     const tState = this._hass.states[this._temperature];
     const tRaw = tState ? parseFloat(tState.state) : NaN;
     const tVal = this._number(this._temperature);
-    const word = tRaw < this._range[0] ? this._words.cool : (tRaw > this._range[1] ? this._words.warm : this._words.comfortable);
     const hVal = this._humidity ? this._number(this._humidity) : null;
+    const word = lampClimateComfort(tRaw, hVal, this._range, this._damp, this._dry, this._words).word;
     const html = '<div class="cd-now"><div class="cd-big">' + (tVal === null ? '--' : tVal.toFixed(1)) + '<span>°</span></div>' +
       '<div class="cd-feel"><b>' + word + '</b>' + (hVal !== null ? '<span>' + Math.round(hVal) + '% humidity</span>' : '') + '</div></div>';
     if (html !== this._heroHtml) { this._heroHtml = html; this._heroEl.innerHTML = html; }

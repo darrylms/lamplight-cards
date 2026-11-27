@@ -164,7 +164,7 @@ covers on the timeline.
 </p>
 
 <p align="center">
-  <img src="docs/images/heads-up-popups.png" alt="Three popups with something to say: the Today popup with an amber wind warning marked on its timeline, a bedroom window left open during the warning, and a bathroom that's been humid most of the week" width="720">
+  <img src="docs/images/heads-up-popups.png" alt="Three popups with something to say: the Today popup with an amber wind warning marked on its timeline, a bedroom window left open during the warning, and a bathroom that's cool and humid now, and has been humid most of the week" width="720">
 </p>
 
 There are some smaller nudges too:

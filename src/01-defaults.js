@@ -73,6 +73,7 @@ const LAMP_DEFAULTS = {
   climate: {
     humidity_range: [45, 65],
     damp_range: [60, 70],
+    dry_below: 40,                  // the comfort word says "dry" under this humidity (%)
     show_wave: true
   },
 
@@ -80,6 +81,7 @@ const LAMP_DEFAULTS = {
     bedroom: false,
     sleep_max_temp: 20,
     damp_range: [60, 70],
+    dry_below: 40,
     night_hours: [23, 7]
   },
 

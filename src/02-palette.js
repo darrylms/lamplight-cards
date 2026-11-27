@@ -96,8 +96,10 @@ const LAMP_MEANINGS = {
   battery: { alert: '235,120,70', notice: '232,195,74', hand: '78,200,130', full: '78,200,130' },
   // The purifier's filter: the bands of the sheet and the alert of the hero.
   filter: { alert: '235,120,70', notice: '232,195,74', hand: '78,200,130' },
-  // The comfort word of a climate row (d-159).
-  comfort: { cool: '90,150,245', warm: '235,120,70', comfortable: '78,200,130' },
+  // The comfort word of a climate row (d-159). humid and dry are the word when the humidity alone
+  // is out of range: the wet and dry ends of the humidity ramp below, the colours the humidity figure
+  // has at those values (27 Nov 2026, design-docs/climate_comfort_options.html, option 2).
+  comfort: { cool: '90,150,245', warm: '235,120,70', comfortable: '78,200,130', humid: '69,209,250', dry: '160,176,188' },
   // Which way the air feels on #today: periwinkle colder, warm amber warmer (29 Oct 2026).
   felt: { colder: '172,166,250', warmer: '240,180,120' },
   // The humidity ramp: dry, middle, wet. Three [r, g, b] stops, not one colour.
