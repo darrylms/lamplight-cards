@@ -1488,15 +1488,52 @@ const LAMP_HERO_FADE = { cx: 262, cy: 74, ax: 1.7, ay: 1.25, rot: Math.atan2(1, 
 const LAMP_HERO_FADE_LEAF = { cx: 164, cy: 64, a: 156, b: 172 };
 const LAMP_HERO_FADE_EASE = [[0, 1], [0.15, 0.97], [0.3, 0.88], [0.45, 0.72], [0.6, 0.5], [0.75, 0.27], [0.88, 0.1], [1, 0]];
 
+// The House picture with the weather (27 Nov 2026, option 6d of design-docs/windows_house_sky_options.html). Plate set 4
+// is plate set 3 taken apart (lamplight-build/tools/house_plates4_build.py), so that the weather changes its light:
+// - the glass: the plate's own leaves, toned by the weather, with the weather's light behind them; by day on a clear or
+//   fair sky the sun shines through. One file for each sky and light, named as the weather plates, so lampPlateChoose
+//   crossfades them as it does the skies;
+// - the room: sunlit on a clear sky, 60% sunlit on a fair sky, grey (soft, even light, no beams) under cloud, rain, snow
+//   and fog. By night the moonbeams draw only on a clear or fair sky. The frame is white paint in the picture's light,
+//   in its key: honey by day, peach under cloud, moon-blue by night;
+// - drops on the glass in rain and thunder, snow on the panes and the sill, mist in fog;
+// - by night the moon shows only where the light shows through the leaves (moon-mask.png), with a soft glow round it.
+// The elevation tint follows the sun's share: none under cloud. File px: glass 818-1012 x 75-277, marks 780-1054 x 45-311.
+const LAMP_HERO_WX_SET = '4';
+const LAMP_HERO_WX = { file: [1270, 423], glass: [818, 75, 194, 202], marks: [780, 45, 274, 266], sun: { clear: 1, fair: 0.6 },
+  mark: { rain: 'rain', thunder: 'rain', snow: 'snow', fog: 'fog' }, glow: 0.3 };
+function lampHeroWxPick(base, state, elev, night) {
+  const X = LAMP_HERO_WX, pick = lampPlateChoose(state, elev, base + 'glass/'), cond = pick.plate;
+  const sun = night ? 0 : (X.sun[cond] || 0), lit = !!X.sun[cond];
+  const rooms = night ? [base + 'room-night-' + (lit ? 'sun' : 'grey') + '.webp'] : sun >= 1 ? [base + 'room-day-sun.webp'] :
+    sun <= 0 ? [base + 'room-day-grey.webp'] : [base + 'room-day-grey.webp', base + 'room-day-sun.webp'];
+  const mk = X.mark[cond] ? base + 'marks-' + X.mark[cond] + '-' + (night ? 'night' : 'day') + '.webp' : null;
+  const mask = night && lit ? base + 'moon-mask.png' : null;
+  const files = [pick.urlA].concat(pick.urlB ? [pick.urlB] : [], rooms, mk ? [mk] : [], mask ? [mask] : []);
+  return { cond: cond, sun: sun, lit: lit, glassA: pick.urlA, glassB: pick.urlB, t: pick.t, rooms: rooms, marks: mk, mask: mask, files: files,
+    key: pick.key + '|' + rooms.join(',') + '|' + (mk || '') };
+}
+
 function lampHeroPlate(o) {
   const k = lampHeroKit(o), f = k.f, id = o.id, day = !o.night, W = o.W, P = LAMP_HERO_PLATE;
   const add = ' style="mix-blend-mode:plus-lighter"';
   const dx = W - P.width, sx = function (x) { return dx + x * P.scale; }, sy = function (y) { return y * P.scale; };
   const gx0 = sx(P.left), gx1 = sx(P.right), gy0 = sy(P.glassTop), gy1 = sy(P.midBar), gy2 = sy(P.glassFoot);
-  const im = '<image href="' + o.url + '" x="' + dx + '" y="0" width="' + P.width + '" height="' + P.height + '" preserveAspectRatio="none"/>';
+  let im = '<image href="' + o.url + '" x="' + dx + '" y="0" width="' + P.width + '" height="' + P.height + '" preserveAspectRatio="none"/>';
+  const X = LAMP_HERO_WX, wx = o.wx;
+  const wxX = function (x) { return dx + x * P.width / X.file[0]; }, wxY = function (y) { return y * P.height / X.file[1]; };
+  const box = function (href, r, op) {
+    return '<image href="' + href + '" x="' + f(wxX(r[0])) + '" y="' + f(wxY(r[1])) + '" width="' + f(r[2] * P.width / X.file[0]) + '" height="' + f(r[3] * P.height / X.file[1]) +
+      '" preserveAspectRatio="none"' + (op != null ? ' opacity="' + f(op) + '"' : '') + '/>';
+  };
+  if (wx) {
+    // The glass under the room; the room's glass is transparent but for the frame's shade on it.
+    const full = function (href, op) { return '<image href="' + href + '" x="' + dx + '" y="0" width="' + P.width + '" height="' + P.height + '" preserveAspectRatio="none"' + (op != null ? ' opacity="' + f(op) + '"' : '') + '/>'; };
+    im = box(wx.glassA, X.glass) + (wx.glassB ? box(wx.glassB, X.glass, wx.t) : '') + full(wx.rooms[0]) + (wx.rooms[1] ? full(wx.rooms[1], wx.sun) : '');
+  }
 
   let top = '', extra = '';
-  if (!day) {
+  if (!day && (!wx || wx.lit)) {
     // The moon: the same drawing as lampHeroSun's, in the plate's right panes. The plate holds no moon.
     const dX = gx0 + (gx1 - gx0) * 0.55, dY = gy1 - (gy1 - gy0) * (0.3 + 0.4 * Math.sin(Math.PI * Math.max(0, Math.min(1, o.frac))));
     const r = P.moon, rs = r + 0.3, phase = o.phase == null ? 1 : o.phase, ex = rs * Math.abs(1 - 2 * phase);
@@ -1507,6 +1544,15 @@ function lampHeroPlate(o) {
       '<circle cx="' + f(dX) + '" cy="' + f(dY) + '" r="' + r + '" fill="rgb(' + LAMP_HERO_SILVER + ')"/>' +
       (phase < 0.995 ? '<path' + turn + ' d="M' + f(dX) + ' ' + f(dY - rs) + 'A' + rs + ' ' + rs + ' 0 0 1 ' + f(dX) + ' ' + f(dY + rs) +
         'A' + f(Math.max(ex, 0.01)) + ' ' + rs + ' 0 0 ' + (phase < 0.5 ? 1 : 0) + ' ' + f(dX) + ' ' + f(dY - rs) + 'Z" fill="rgb(' + P.nightSky + ')" fill-opacity=".96"/>' : '');
+    if (wx && wx.mask) {
+      // Behind the leaves the moon shows only through the gaps; its light glows over the leaves round it.
+      const g = X.glass, gx = wxX(g[0]), gy = wxY(g[1]), gw = g[2] * P.width / X.file[0], gh = g[3] * P.height / X.file[1];
+      extra += '<mask id="' + id + 'mm" maskUnits="userSpaceOnUse" x="0" y="0" width="' + W + '" height="' + P.height + '">' + box(wx.mask, g) + '</mask>' +
+        '<clipPath id="' + id + 'mg"><rect x="' + f(gx) + '" y="' + f(gy) + '" width="' + f(gw) + '" height="' + f(gh) + '"/></clipPath>' +
+        '<radialGradient id="' + id + 'mb"><stop offset="0" stop-color="rgb(180,204,240)" stop-opacity="1"/><stop offset="1" stop-color="rgb(180,204,240)" stop-opacity="0"/></radialGradient>';
+      top = '<g clip-path="url(#' + id + 'mg)"><circle cx="' + f(dX) + '" cy="' + f(dY) + '" r="14" fill="url(#' + id + 'mb)" fill-opacity="' + f(X.glow * Math.max(0.3, phase) * (wx.cond === 'clear' ? 1 : 0.6)) + '"' + add + '/></g>' +
+        '<g mask="url(#' + id + 'mm)">' + top + '</g>';
+    }
   }
   if (o.open) {
     // The open casement over the right panes: open-blue glass, and a glowing outline.
@@ -1519,7 +1565,7 @@ function lampHeroPlate(o) {
   let tint = '';
   if (day) {
     const up = Math.max(0, Math.min(60, o.elev || 0)) / 60, e = o.elev || 0;
-    const t = Math.min(1, Math.abs(e - P.sunElev) / 18) * (e < P.sunElev ? 0.8 : 0.45);
+    const t = Math.min(1, Math.abs(e - P.sunElev) / 18) * (e < P.sunElev ? 0.8 : 0.45) * (wx ? wx.sun : 1);
     if (t > 0.01) {
       extra += '<mask id="' + id + 'tm" maskUnits="userSpaceOnUse" x="0" y="0" width="' + W + '" height="' + P.height + '">' + im + '</mask>';
       tint = '<rect x="0" y="0" width="' + W + '" height="' + P.height + '" fill="rgb(' + lampArcAt(LAMP_HERO_SUN_GLASS, up) + ')" fill-opacity="' + f(t) +
@@ -1577,7 +1623,8 @@ function lampHeroPlate(o) {
   const satv = +(P.saturate * (1 - (1 - P.sunsetSat) * sunK)).toFixed(3);
   const calm = satv !== 1;
   if (calm) extra += '<filter id="' + id + 'ps" filterUnits="userSpaceOnUse" x="0" y="0" width="' + W + '" height="' + P.height + '" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="' + satv + '"/></filter>';
-  const svg = k.svg(k.defs(extra) + '<g mask="url(#' + id + 'tf)"><g' + (calm ? ' filter="url(#' + id + 'ps)"' : '') + ' style="isolation:isolate">' + im + tint + '</g></g>' + top);
+  const marks = wx && wx.marks ? box(wx.marks, X.marks) : '';
+  const svg = k.svg(k.defs(extra) + '<g mask="url(#' + id + 'tf)"><g' + (calm ? ' filter="url(#' + id + 'ps)"' : '') + ' style="isolation:isolate">' + im + tint + marks + '</g></g>' + top);
   return { svg: svg, x: sx(P.windowX), y: 60, at: day ? '255,214,160' : '150,178,235' };
 }
 

@@ -76,7 +76,7 @@ With `header_art: live`, the picture at the top of the sheet is made from the ca
 | `lamplight-purifier-detail` | A trace of the last 24 hours of air quality |
 | `lamplight-batteries` | The batteries, each filled to its level |
 | `lamplight-windows-detail` (one room) | The sky through the window panes, with the sun or moon when it's clear. An open window has a soft blue light in the gap |
-| `lamplight-windows-detail` (whole home) | Sunlight or moonlight falling into the room |
+| `lamplight-windows-detail` (whole home) | A room with a tree outside, and today's weather coming in through the leaves |
 
 The header shows the `icon` until the data arrives.
 

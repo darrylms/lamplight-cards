@@ -197,9 +197,12 @@ These are the same four evening states for the whole home:
 
 The window popups show you the weather outside, and they are one of the best parts of Lamplight.
 
-The picture at the top has the light from outside. On the whole-home popup, sunlight falls into the
-room at the sun's real height and turns golden near sunset. At night there is moonlight, with the
-actual moon phase for that night.
+The picture at the top has the light from outside. On the whole-home popup you look into a room with
+a tree right outside the window, and the weather comes in through its leaves. When it's sunny the sun
+shines through and lays its light across the floor. It turns golden near sunset. On a grey day there's
+no sun and the room goes soft and dim. Rain leaves drops on the glass and fog mists the panes. Snow
+piles up on the sill. At night the moon peeks through the leaves in its real phase, as long as the sky
+is clear.
 
 <p align="center">
   <img src="../images/window-weather-house.png" alt="The top of the whole-home windows popup by day, with sunlight falling through the window, and at night, with moonlight" width="560">
