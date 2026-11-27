@@ -53,7 +53,7 @@ Here is how it all looks together:
 
 > [!NOTE]
 > Lamplight is still in development. There is no
-> visual editor so everything is set up in YAML. Please don't let that put you off. Every page in
+> visual editor so everything is set up in YAML. Don't let that put you off. Every page in
 > these docs has an example that you can copy and paste.
 
 ## Highlights
@@ -190,7 +190,7 @@ list to keep up to date.
   <img src="docs/images/batteries-popup.png" alt="The batteries popup listing all 18 batteries: one worth noticing, nine fine and eight at full" width="300">
 </p>
 
-### No dashboard plugins needed but they do enhance some features
+### No other dashboard plugins needed but they do enhance some features
 
 Lamplight works without any other plugins. If you already use
 [Bubble Card](https://github.com/Clooos/Bubble-Card) or
