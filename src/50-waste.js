@@ -230,7 +230,7 @@ class LampWaste extends LampShell {
         'border-radius:999px;font-size:var(--lamplight-t-state);font-weight:500;line-height:1.4;' +
         'background:rgba(' + b.chip + ',0.13);' +
         'color:' + b.text + '">' +
-        '<ha-icon icon="' + b.icon + '" style="line-height:0;--mdc-icon-size:17px;' +
+        '<ha-icon icon="' + lampEsc(b.icon) + '" style="line-height:0;--mdc-icon-size:17px;' +
         'width:17px;height:17px;margin:0;color:rgb(' + b.color + ');' +
         'filter:drop-shadow(0 0 4px rgba(' + b.glow + ',0.9))"></ha-icon>' +
         // The label sat 0.6px above the chip's centre: the line box centres the font's
@@ -239,7 +239,7 @@ class LampWaste extends LampShell {
         // so 0.5px more puts the capitals on the drawn centre of the icon, 15.9px of 31.
         // Measured at 375px, 12 November 2026. A browser without text-box moves 0.5px only.
         '<span style="text-box:trim-both cap alphabetic;position:relative;top:0.5px">' +
-        b.label + '</span></div>';
+        lampEsc(b.label) + '</span></div>';
     }).join('');
 
     let foot = '';
@@ -260,7 +260,7 @@ class LampWaste extends LampShell {
         '<span class="lamp-waste-break" style="display:none;flex-basis:100%;height:0"></span>' +
         '<span class="lamp-waste-what" style="white-space:nowrap">' +
         '<span class="lamp-waste-sep">&mdash; </span>' +
-        ab.map(function (b) { return b.label; }).join(', ') + '</span>' +
+        ab.map(function (b) { return lampEsc(b.label); }).join(', ') + '</span>' +
         '<span style="display:inline-flex;gap:4px;margin-left:auto;flex:none;' +
         'transform:translateY(-0.25px)">' +
         ab.map(function (b) {

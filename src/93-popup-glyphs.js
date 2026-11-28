@@ -799,8 +799,8 @@ function lampHeroPanes(o) {
   const k = lampHeroKit(o), f = k.f, id = o.id, HZ = k.HZ, n = o.windows.length, P = LAMP_HERO_PAINT;
   const bx = o.W - 161, bw = 104, wh = 82, wy = HZ - 2 - wh, fw = 3.2, gap = n > 1 ? 5 : 0, pw = (bw - gap * (n - 1)) / n;
   const sky = function () {
-    return '<image href="' + o.urlA + '" x="' + (bx - 150) + '" y="' + (wy - 20) + '" width="420" height="140" preserveAspectRatio="xMidYMid slice"/>' +
-      (o.urlB ? '<image href="' + o.urlB + '" x="' + (bx - 150) + '" y="' + (wy - 20) + '" width="420" height="140" preserveAspectRatio="xMidYMid slice" opacity="' + o.t + '"/>' : '');
+    return '<image href="' + lampEsc(o.urlA) + '" x="' + (bx - 150) + '" y="' + (wy - 20) + '" width="420" height="140" preserveAspectRatio="xMidYMid slice"/>' +
+      (o.urlB ? '<image href="' + lampEsc(o.urlB) + '" x="' + (bx - 150) + '" y="' + (wy - 20) + '" width="420" height="140" preserveAspectRatio="xMidYMid slice" opacity="' + o.t + '"/>' : '');
   };
   const rect = function (x, y, w, h, fill) {
     return '<rect x="' + f(x) + '" y="' + f(y) + '" width="' + f(w) + '" height="' + f(h) + '"' + (fill ? ' fill="' + fill + '"' : '') + '/>';
@@ -1129,13 +1129,13 @@ function lampHeroFrames(o) {
     return '<rect x="' + f(x) + '" y="' + f(y) + '" width="' + f(w) + '" height="' + f(hh) + '"' + (fill ? ' fill="' + fill + '"' : '') + (extra || '') + '/>';
   };
   const sky = function () {
-    return '<image href="' + o.urlA + '" x="' + (bx - 150) + '" y="' + (top - 20) + '" width="420" height="140" preserveAspectRatio="xMidYMid slice"/>' +
-      (o.urlB ? '<image href="' + o.urlB + '" x="' + (bx - 150) + '" y="' + (top - 20) + '" width="420" height="140" preserveAspectRatio="xMidYMid slice" opacity="' + o.t + '"/>' : '');
+    return '<image href="' + lampEsc(o.urlA) + '" x="' + (bx - 150) + '" y="' + (top - 20) + '" width="420" height="140" preserveAspectRatio="xMidYMid slice"/>' +
+      (o.urlB ? '<image href="' + lampEsc(o.urlB) + '" x="' + (bx - 150) + '" y="' + (top - 20) + '" width="420" height="140" preserveAspectRatio="xMidYMid slice" opacity="' + o.t + '"/>' : '');
   };
   // All the slices of one plate image.
   const slices = function (href) {
     const piece = function (sx, sy, sw, sh, dx, dy, dw, dh, flip) {
-      const im = '<image href="' + href + '" x="0" y="0" width="' + P.w + '" height="' + P.h + '" preserveAspectRatio="none"/>';
+      const im = '<image href="' + lampEsc(href) + '" x="0" y="0" width="' + P.w + '" height="' + P.h + '" preserveAspectRatio="none"/>';
       return '<svg x="' + f(dx) + '" y="' + f(dy) + '" width="' + f(dw) + '" height="' + f(dh) + '" viewBox="' + sx + ' ' + sy + ' ' + sw + ' ' + sh +
         '" preserveAspectRatio="none" style="overflow:hidden;width:' + f(dw) + 'px;height:' + f(dh) + 'px">' +
         (flip ? '<g transform="translate(' + (2 * sx + sw) + ' 0) scale(-1 1)">' + im + '</g>' : im) + '</svg>';
@@ -1201,7 +1201,7 @@ function lampHeroFrames(o) {
     (o.nightShare > 0 ? '<g opacity="' + o.nightShare + '"><g filter="url(#' + id + 'pn)">' + slices(o.plates.night) + '</g></g>' : '');
   const pvc = lampHeroPvcFilter(id + 'pd', o.W, LAMP_HERO_FRAME_PVC.day) + lampHeroPvcFilter(id + 'pn', o.W, LAMP_HERO_FRAME_PVC.night);
   const band = function (href) {
-    const im = '<image href="' + href + '" x="0" y="0" width="' + P.w + '" height="' + P.h + '" preserveAspectRatio="none"/>';
+    const im = '<image href="' + lampEsc(href) + '" x="0" y="0" width="' + P.w + '" height="' + P.h + '" preserveAspectRatio="none"/>';
     const one = function (dx, flip) {
       return '<svg x="' + f(dx) + '" y="0" width="' + f(ww + 0.5) + '" height="' + f(HZ) + '" viewBox="0 0 ' + RW.w + ' ' + RW.foot + '" preserveAspectRatio="none" style="overflow:hidden;width:' +
         f(ww + 0.5) + 'px;height:' + f(HZ) + 'px">' + (flip ? '<g transform="translate(' + RW.w + ' 0) scale(-1 1)">' + im + '</g>' : im) + '</svg>';
@@ -1519,16 +1519,16 @@ function lampHeroPlate(o) {
   const add = ' style="mix-blend-mode:plus-lighter"';
   const dx = W - P.width, sx = function (x) { return dx + x * P.scale; }, sy = function (y) { return y * P.scale; };
   const gx0 = sx(P.left), gx1 = sx(P.right), gy0 = sy(P.glassTop), gy1 = sy(P.midBar), gy2 = sy(P.glassFoot);
-  let im = '<image href="' + o.url + '" x="' + dx + '" y="0" width="' + P.width + '" height="' + P.height + '" preserveAspectRatio="none"/>';
+  let im = '<image href="' + lampEsc(o.url) + '" x="' + dx + '" y="0" width="' + P.width + '" height="' + P.height + '" preserveAspectRatio="none"/>';
   const X = LAMP_HERO_WX, wx = o.wx;
   const wxX = function (x) { return dx + x * P.width / X.file[0]; }, wxY = function (y) { return y * P.height / X.file[1]; };
   const box = function (href, r, op) {
-    return '<image href="' + href + '" x="' + f(wxX(r[0])) + '" y="' + f(wxY(r[1])) + '" width="' + f(r[2] * P.width / X.file[0]) + '" height="' + f(r[3] * P.height / X.file[1]) +
+    return '<image href="' + lampEsc(href) + '" x="' + f(wxX(r[0])) + '" y="' + f(wxY(r[1])) + '" width="' + f(r[2] * P.width / X.file[0]) + '" height="' + f(r[3] * P.height / X.file[1]) +
       '" preserveAspectRatio="none"' + (op != null ? ' opacity="' + f(op) + '"' : '') + '/>';
   };
   if (wx) {
     // The glass under the room; the room's glass is transparent but for the frame's shade on it.
-    const full = function (href, op) { return '<image href="' + href + '" x="' + dx + '" y="0" width="' + P.width + '" height="' + P.height + '" preserveAspectRatio="none"' + (op != null ? ' opacity="' + f(op) + '"' : '') + '/>'; };
+    const full = function (href, op) { return '<image href="' + lampEsc(href) + '" x="' + dx + '" y="0" width="' + P.width + '" height="' + P.height + '" preserveAspectRatio="none"' + (op != null ? ' opacity="' + f(op) + '"' : '') + '/>'; };
     im = box(wx.glassA, X.glass) + (wx.glassB ? box(wx.glassB, X.glass, wx.t) : '') + full(wx.rooms[0]) + (wx.rooms[1] ? full(wx.rooms[1], wx.sun) : '');
   }
 

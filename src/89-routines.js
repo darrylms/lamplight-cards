@@ -52,7 +52,7 @@
 // Configuration:
 //   routines    required. In the day order, from the left. Each has:
 //     entity      required. The script. A tap runs it
-//     name        optional: the script's friendly_name. The household's name wins
+//     name        optional: the script's own name. Text, or HA name parts (01-entity.js). The household's name wins
 //     icon        optional: the script's icon. The household's icon wins
 //     accent      required. The lamp's colour: a palette name (marigold), or "r,g,b". A palette name
 //                 also gives the glow, the glass and the orb of that colour
@@ -487,7 +487,7 @@ class LampRoutines extends HTMLElement {
     // gives the rest in `set hass`. Until then the entity ID and a script icon fill the gap.
     this._given = config.routines.map(function (r) { return { name: r.name, icon: r.icon }; });
     config = Object.assign({}, config, { routines: config.routines.map(function (r) {
-      return Object.assign({}, r, { name: r.name || r.entity, icon: r.icon || lampEntityIcon(null, r.entity) });
+      return Object.assign({}, r, { name: lampNameText(r.name) || r.entity, icon: r.icon || lampEntityIcon(null, r.entity) });
     }) });
     // An `accent` that is a palette name gives the accent (soft), the glow (deep), and the glass and
     // the orb where the palette has them. A key written on the routine wins.

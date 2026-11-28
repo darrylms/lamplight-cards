@@ -282,11 +282,12 @@ function lampDayCompute(forecast, nextRisingIso, nextSettingIso, now, windUnit) 
   // hour rows. A tick marks sunrise or sunset between items, or between rows in a wet block.
   const timeline = [];
   // In the tonight window, the sunrise into tomorrow also names the day. It is markup: the
-  // weekday is bold. lampDayEsc does not escape, and nothing here comes from a user.
+  // weekday is bold. The text parts are escaped here, so lampDayBody writes the tick as it is.
   const tickText = function (a, b) {
-    if (!b.day) return 'sunset ' + sunset;
+    if (!b.day) return 'sunset ' + lampEsc(sunset);
     const into = mode === 'tonight' && lampDayDateStr(new Date(b.ts * 1000)) === tomorrow;
-    return (into ? '<b>' + LAMP_DAY_WEEKDAYS[new Date(b.ts * 1000).getDay()] + '</b> · ' : '') + 'sunrise ' + sunrise;
+    return (into ? '<b>' + lampEsc(LAMP_DAY_WEEKDAYS[new Date(b.ts * 1000).getDay()]) + '</b> · ' : '') +
+      'sunrise ' + lampEsc(sunrise);
   };
   groups.forEach(function (g, gi) {
     const prev = groups[gi - 1];
@@ -462,8 +463,7 @@ function lampDayTonightBrief(hrs, groups, riseTs) {
 
 // ---- the HTML. A direct port of the button-card custom_field the sensor fed. -----------
 
-function lampDayEsc(x) { return String(x == null ? '' : x); }
-function lampDayBoldMm(t) { return lampDayEsc(t).replace(/([0-9.]+ mm)/, '<b>$1</b>'); }
+function lampDayBoldMm(t) { return lampEsc(t).replace(/([0-9.]+ mm)/, '<b>$1</b>'); }
 
 // The small thermometer in front of the felt range. It takes the line's colour.
 const LAMP_DAY_THERMO = "<svg width='9' height='15' viewBox='0 0 9 15' aria-hidden='true'>" +
@@ -620,8 +620,8 @@ function lampDayBody(d, warnState, warnCount, span, now) {
     const n = warnCount ? parseInt(warnCount, 10) : 0;
     const note = lampWarnNotice(span, now);
     h += "<div class='dc-warn " + cls + "'>" +
-      "<div class='wt'><span class='wg'><ha-icon icon='mdi:alert'></ha-icon></span>" + lampDayEsc(warnState) + "</div>" +
-      (note ? "<div class='wn'>" + lampDayEsc(note.span) + "</div><div class='wc'>" + lampDayEsc(note.count) + "</div>" : "") +
+      "<div class='wt'><span class='wg'><ha-icon icon='mdi:alert'></ha-icon></span>" + lampEsc(warnState) + "</div>" +
+      (note ? "<div class='wn'>" + lampEsc(note.span) + "</div><div class='wc'>" + lampEsc(note.count) + "</div>" : "") +
       (n > 1 ? "<div class='ww'>" + n + " warnings in force</div>" : "") +
       "</div>";
   }
@@ -634,19 +634,19 @@ function lampDayBody(d, warnState, warnCount, span, now) {
   const wline = function (t0) {
     if (lined) return '';
     lined = true;
-    return "<div class='dc-wn'>" + lampDayEsc(lampDayWarnLine(reason, wr, wf >= t0, new Date(t0))) + "</div>";
+    return "<div class='dc-wn'>" + lampEsc(lampDayWarnLine(reason, wr, wf >= t0, new Date(t0))) + "</div>";
   };
 
-  h += "<div class='dc-date'><span class='ti'>" + lampDayEsc(d.title) + "</span> · <span class='dd' data-full='" +
-    lampDayEsc(d.date) + "' data-short='" + lampDayEsc(d.date_short || d.date) + "'>" + lampDayEsc(d.date) + "</span></div>";
-  h += "<div class='dc-head'><div><div class='dc-t'>" + lampDayEsc(d.high) + "°" +
-    "<span class='lo'>/ " + lampDayEsc(d.low) + "°</span></div>" +
+  h += "<div class='dc-date'><span class='ti'>" + lampEsc(d.title) + "</span> · <span class='dd' data-full='" +
+    lampEsc(d.date) + "' data-short='" + lampEsc(d.date_short || d.date) + "'>" + lampEsc(d.date) + "</span></div>";
+  h += "<div class='dc-head'><div><div class='dc-t'>" + lampEsc(d.high) + "°" +
+    "<span class='lo'>/ " + lampEsc(d.low) + "°</span></div>" +
     (d.feels ? "<div class='dc-f " + d.feels.dir + "'>" + LAMP_DAY_THERMO + "<span>feels " +
-      lampDayEsc(d.feels.high) + "° / " + lampDayEsc(d.feels.low) + "°</span></div>" : '') + "</div>" +
-    "<div class='dc-r'>Sunrise " + lampDayEsc(d.sunrise) + "<br>Sunset " + lampDayEsc(d.sunset) + "</div></div>";
+      lampEsc(d.feels.high) + "° / " + lampEsc(d.feels.low) + "°</span></div>" : '') + "</div>" +
+    "<div class='dc-r'>Sunrise " + lampEsc(d.sunrise) + "<br>Sunset " + lampEsc(d.sunset) + "</div></div>";
 
-  h += "<div class='dc-brief'>" + lampDayEsc(d.brief) +
-    (d.brief_dim ? " <span class='d'>" + lampDayEsc(d.brief_dim) + "</span>" : "") + "</div>";
+  h += "<div class='dc-brief'>" + lampEsc(d.brief) +
+    (d.brief_dim ? " <span class='d'>" + lampEsc(d.brief_dim) + "</span>" : "") + "</div>";
 
   // The section shows only when an hour reaches 15%, the card's own "dry all day" line. On a
   // dry day it drew a flat ribbon. Household decision, 24 September 2026.
@@ -656,9 +656,9 @@ function lampDayBody(d, warnState, warnCount, span, now) {
     h += "<div class='dc-rib'></div>";
     const R = d.rain || { lines: [] };
     h += "<div class='dc-riblab'>" + (R.lines.length ? R.lines.map(function (l) {
-      return "<div><b>Rain likely " + lampDayEsc(l.span) + "</b> · " + lampDayEsc(l.word) + ", up to " +
-        lampDayEsc(l.mm) + " <span class='u'>mm an hour</span></div>";
-    }).join('') : "<div>No hour above " + lampDayEsc(d.pmax) + "%</div>") + "</div>";
+      return "<div><b>Rain likely " + lampEsc(l.span) + "</b> · " + lampEsc(l.word) + ", up to " +
+        lampEsc(l.mm) + " <span class='u'>mm an hour</span></div>";
+    }).join('') : "<div>No hour above " + lampEsc(d.pmax) + "%</div>") + "</div>";
   }
 
   // THROUGH THE DAY. Always open: it replaces two sections, one of them behind a tap.
@@ -666,9 +666,9 @@ function lampDayBody(d, warnState, warnCount, span, now) {
   const tl = d.timeline || [];
   if (tl.length) {
     const band = function (it) {
-      return "<div class='bh'><span class='tt'>" + lampDayEsc(it.span) + "</span>" +
+      return "<div class='bh'><span class='tt'>" + lampEsc(it.span) + "</span>" +
         "<span class='gg'>" + lampGlyph(it.glyph, 20) + "</span>" +
-        "<span class='rr'>" + lampDayEsc(it.rr) + "</span></div>" +
+        "<span class='rr'>" + lampEsc(it.rr) + "</span></div>" +
         "<div class='bb'>" + lampDayBoldMm(it.line) + "</div>";
     };
     const WR = "<i class='dc-wr'></i>";
@@ -677,11 +677,11 @@ function lampDayBody(d, warnState, warnCount, span, now) {
       const a = tl[i - 1], b = tl[i + 1];
       return !!(a && b && a.t0 !== undefined && b.t0 !== undefined && on(a.t0, a.t1) && on(b.t0, b.t1));
     };
-    h += "<div class='dc-sh'>" + lampDayEsc(d.section || 'Through the day') + "</div><div class='dc-ledger" + (cls && cls !== 'moderate' ? ' w-' + cls : '') + "'>";
+    h += "<div class='dc-sh'>" + lampEsc(d.section || 'Through the day') + "</div><div class='dc-ledger" + (cls && cls !== 'moderate' ? ' w-' + cls : '') + "'>";
     tl.forEach(function (it, i) {
       if (it.kind === 'tick') {
         h += "<div class='dc-tick' style='--from:var(--sky-" + it.from + ");--to:var(--sky-" + it.to + ")'>" +
-          lampDayEsc(it.text) + (near(i) ? WR : '') + "</div>";
+          it.text + (near(i) ? WR : '') + "</div>";   // markup from tickText, escaped there
       } else if (it.kind === 'band') {
         const w = on(it.t0, it.t1);
         h += "<div class='dc-band s-" + it.sky + "' data-p='" + it.p + "'" + (w ? " data-warn='1'" : '') + ">" +
@@ -707,18 +707,18 @@ function lampDayBody(d, warnState, warnCount, span, now) {
         it.rows.forEach(function (r, k) {
           if (r.tick) {
             const w = (head || rowOn(it.rows[k - 1])) && rowOn(it.rows[k + 1]);
-            h += "<div class='dc-tick" + (w ? " w-in" : '') + "'>" + lampDayEsc(r.tick) + (w ? WR : '') + "</div>";
+            h += "<div class='dc-tick" + (w ? " w-in" : '') + "'>" + r.tick + (w ? WR : '') + "</div>";
             return;
           }
           const w = rowOn(r);
           const note = w ? wline(r.t0) : '';
           const cap = w && k === lastOn && wu > it.t1 ? " dn" : '';
-          h += "<div class='dc-row s-wet" + (w ? " w-in" : '') + "'><span class='t'>" + lampDayEsc(r.t) + "</span>" +
+          h += "<div class='dc-row s-wet" + (w ? " w-in" : '') + "'><span class='t'>" + lampEsc(r.t) + "</span>" +
             "<span class='g'>" + lampGlyph(r.glyph, 20) + "</span>" +
-            "<span><span class='dc-bar'><i style='width:" + lampDayEsc(r.p) + "%'></i></span>" +
-            "<span class='dc-pc'>" + lampDayEsc(r.p) + "%" +
-            (r.mm ? " <span class='dc-mm'>" + lampDayEsc(r.mm) + "</span>" : "") + "</span></span>" +
-            "<span class='tm'>" + lampDayEsc(r.temp) + "°</span>" +
+            "<span><span class='dc-bar'><i style='width:" + lampEsc(r.p) + "%'></i></span>" +
+            "<span class='dc-pc'>" + lampEsc(r.p) + "%" +
+            (r.mm ? " <span class='dc-mm'>" + lampEsc(r.mm) + "</span>" : "") + "</span></span>" +
+            "<span class='tm'>" + lampEsc(r.temp) + "°</span>" +
             (w ? "<i class='dc-wr" + (note ? '' : cap) + "'></i>" : '') + "</div>";
           // The line follows the row it begins on, and carries the rail on to the next row.
           if (note) h += note.replace("class='dc-wn'", "class='dc-wn w-in'").replace('</div>', "<i class='dc-wr" + cap + "'></i></div>");

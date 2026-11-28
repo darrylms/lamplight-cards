@@ -131,10 +131,6 @@ function lampWinSinceNight(ts, now) {
   return lampWinSince(ts, now);
 }
 
-function lampWinEsc(x) {
-  return String(x == null ? '' : x).replace(/&/g, '&amp;').replace(/</g, '&lt;');
-}
-
 // "Monday", "Monday and Friday", "Monday, Tuesday and Friday".
 function lampWinList(a) {
   if (a.length <= 1) return a.join('');
@@ -262,11 +258,11 @@ function lampWinRoomLead(list, unionTodayMs, now, last, days) {
   const open = list.filter(function (w) { return w.state === 'on'; });
   const n = list.length;
   if (open.length) {
-    const names = lampWinList(open.map(function (w) { return lampWinEsc(w.name); }));
+    const names = lampWinList(open.map(function (w) { return lampEsc(w.name); }));
     const sinces = open.map(function (w) { return lampWinSince(w.sinceTs, now); });
     if (open.length === 1) return '<b>' + names + ' is open,</b> ' + sinces[0] + '.';
     if (sinces.every(function (x) { return x === sinces[0]; })) return '<b>' + names + ' are open,</b> ' + sinces[0] + '.';
-    return '<b>' + names + ' are open.</b> ' + open.map(function (w, i) { return lampWinEsc(w.name) + ' ' + sinces[i]; }).join(', ') + '.';
+    return '<b>' + names + ' are open.</b> ' + open.map(function (w, i) { return lampEsc(w.name) + ' ' + sinces[i]; }).join(', ') + '.';
   }
   if (!last) return '<b>' + (n === 1 ? 'Not' : 'None') + ' opened in the past ' + days + ' days.</b>';
   const head = lampWinSinceNight(last, now).replace(/^s/, 'S') + '.';
@@ -303,7 +299,7 @@ function lampWinRoomLooks(evenings, list, todayMs, usualMs, now, accent) {
     if (still.length) {
       // A window open after sunset now. The other evenings are a clause, not a second note.
       afterDark = true;
-      const names = lampWinList(still.map(function (x) { return lampWinEsc(list[x.i].name); }));
+      const names = lampWinList(still.map(function (x) { return lampEsc(list[x.i].name); }));
       const other = evs.filter(function (e) { return e !== today; });
       looks.push({ k: accent, head: 'Open after dark',
         line: names + (still.length === 1 ? ' has' : ' have') + ' been open ' + lampWinDur(still[0].afterMs) +
@@ -313,14 +309,14 @@ function lampWinRoomLooks(evenings, list, todayMs, usualMs, now, accent) {
       // Left open after dark on one or more evenings, now closed. The latest close ends the line.
       afterDark = true;
       const wins = hits.map(function (h) { return h.x.i; }).filter(function (i, k, a) { return a.indexOf(i) === k; });
-      const who = wins.length === 1 ? lampWinEsc(list[wins[0]].name) : 'A window';
+      const who = wins.length === 1 ? lampEsc(list[wins[0]].name) : 'A window';
       const when = evs.length === 1 ? (evs[0] === today ? 'this evening' : 'on ' + dayWord(evs[0]))
         : evs.length === 2 ? 'twice' : 'on ' + evs.length + ' evenings';
       let line = '';
       if (wins.length > 1) {
         line = wins.map(function (i) {
           const ds = evs.filter(function (e) { return e.windows.some(function (x) { return x.i === i && x.close !== null; }); });
-          return lampWinEsc(list[i].name) + ' on ' + lampWinList(ds.map(dayWord));
+          return lampEsc(list[i].name) + ' on ' + lampWinList(ds.map(dayWord));
         }).join('; ') + '. ';
       } else if (evs.length > 1) {
         line = lampWinList(evs.map(dayWord)).replace(/^./, function (c) { return c.toUpperCase(); }) + '. ';
@@ -328,7 +324,7 @@ function lampWinRoomLooks(evenings, list, todayMs, usualMs, now, accent) {
       const lastE = evs[evs.length - 1];
       let best = null;
       lastE.windows.forEach(function (x) { if (x.close !== null && (!best || x.close > best.close)) best = x; });
-      const subj = wins.length > 1 ? lampWinEsc(list[best.i].name) : 'it';
+      const subj = wins.length > 1 ? lampEsc(list[best.i].name) : 'it';
       const lead = evs.length === 1 && wins.length === 1 ? 'It'
         : (lastE === today ? 'This evening ' : 'On ' + dayWord(lastE) + ' ') + subj;
       line += lead + ' closed at ' + lampWinHM(new Date(best.close)) + ', ' + lampWinDur(best.afterMs) + ' after sunset.';
@@ -342,7 +338,7 @@ function lampWinRoomLooks(evenings, list, todayMs, usualMs, now, accent) {
       line: (n === 1 ? 'A day it opens' : 'A day with a window open') + ' is usually ' + lampWinAbout(usualMs) + '.' });
   }
   list.forEach(function (w) {
-    if (w.state === 'gone') looks.push({ k: '255,255,255', head: lampWinEsc(w.name) + ' gives no signal', line: 'Its state is not known.' });
+    if (w.state === 'gone') looks.push({ k: '255,255,255', head: lampEsc(w.name) + ' gives no signal', line: 'Its state is not known.' });
   });
   return { looks: looks, afterDark: afterDark, longer: longer };
 }
@@ -404,12 +400,12 @@ function lampWinWarning(hass, entity, countEntity) {
 // "Kitchen is open", "Both bedroom windows are open", "All 3 lounge windows are open", "4 windows are open".
 function lampWinOpenPhrase(list) {
   const open = list.filter(function (w) { return w.state === 'on'; });
-  if (open.length === 1) return lampWinEsc(open[0].longName) + ' is open';
+  if (open.length === 1) return lampEsc(open[0].longName) + ' is open';
   const rooms = open.map(function (w) { return w.room; }).filter(function (r, i, a) { return a.indexOf(r) === i; });
   if (rooms.length === 1) {
     const total = list.filter(function (w) { return w.room === rooms[0]; }).length;
     if (total === open.length) {
-      return (total === 2 ? 'Both ' : 'All ' + total + ' ') + lampWinEsc(rooms[0].toLowerCase()) + ' windows are open';
+      return (total === 2 ? 'Both ' : 'All ' + total + ' ') + lampEsc(rooms[0].toLowerCase()) + ' windows are open';
     }
   }
   return open.length + ' windows are open';
@@ -432,7 +428,7 @@ function lampWinBand(look, now, warn, phrase, o) {
   if (warn) {
     const facts = ['In force'];
     if (warn.count > 1) facts.push(warn.count + ' warnings');
-    return { level: warn.level, glyph: 'warn', chip: warn.label.toUpperCase(), title: lampWinEsc(warn.title),
+    return { level: warn.level, glyph: 'warn', chip: warn.label.toUpperCase(), title: lampEsc(warn.title),
       detail: lampWinJoin(facts, phrase), at: null };
   }
   const h0 = lampWinHourStart(now);
@@ -482,12 +478,12 @@ function lampWinHouseLead(list, unionTodayMs, now, wx) {
   const open = list.filter(function (w) { return w.state === 'on'; });
   const gone = list.filter(function (w) { return w.state === 'gone'; });
   const tail = gone.length
-    ? ' ' + lampWinList(gone.map(function (w) { return lampWinEsc(w.longName); })) + (gone.length === 1 ? ' gives' : ' give') + ' no signal.' : '';
+    ? ' ' + lampWinList(gone.map(function (w) { return lampEsc(w.longName); })) + (gone.length === 1 ? ' gives' : ' give') + ' no signal.' : '';
   if (open.length) {
     const rooms = open.map(function (w) { return w.room; }).filter(function (r, i, a) { return a.indexOf(r) === i; });
     const names = rooms.length === 1 && open.every(function (w) { return !w.customLong; })
-      ? lampWinEsc(rooms[0]) + ' ' + lampWinList(open.map(function (w) { return lampWinEsc(w.name.toLowerCase()); }))
-      : lampWinList(open.map(function (w) { return lampWinEsc(w.longName); }));
+      ? lampEsc(rooms[0]) + ' ' + lampWinList(open.map(function (w) { return lampEsc(w.name.toLowerCase()); }))
+      : lampWinList(open.map(function (w) { return lampEsc(w.longName); }));
     const verb = open.length === 1 ? ' is open' : ' are open';
     const sinces = open.map(function (w) { return lampWinSince(w.sinceTs, now); });
     let s;
@@ -495,7 +491,7 @@ function lampWinHouseLead(list, unionTodayMs, now, wx) {
       s = '<b>' + names + verb + ',</b> ' + sinces[0] + '.';
     } else {
       s = '<b>' + names + verb.replace(' is', ' are') + '.</b> ' +
-        open.map(function (w, i) { return lampWinEsc(w.longName) + ' ' + sinces[i]; }).join(', ') + '.';
+        open.map(function (w, i) { return lampEsc(w.longName) + ' ' + sinces[i]; }).join(', ') + '.';
     }
     if (wx.on && !wx.band) s += ' ' + (wx.look.length ? lampWinGood(wx.look) : 'No forecast yet.');
     return s + tail;
@@ -511,10 +507,10 @@ function lampWinHouseLead(list, unionTodayMs, now, wx) {
     } else {
       const total = list.filter(function (w) { return w.room === rooms[0]; }).length;
       let who;
-      if (total === 1) who = 'The ' + lampWinEsc(opened[0].longName.toLowerCase()) + ' was';
-      else if (opened.length === total) who = 'The ' + lampWinEsc(rooms[0].toLowerCase()) + ' windows were';
-      else if (opened.length === 1) who = lampWinEsc(opened[0].longName) + ' was';
-      else who = lampWinList(opened.map(function (w) { return lampWinEsc(w.longName); })) + ' were';
+      if (total === 1) who = 'The ' + lampEsc(opened[0].longName.toLowerCase()) + ' was';
+      else if (opened.length === total) who = 'The ' + lampEsc(rooms[0].toLowerCase()) + ' windows were';
+      else if (opened.length === 1) who = lampEsc(opened[0].longName) + ' was';
+      else who = lampWinList(opened.map(function (w) { return lampEsc(w.longName); })) + ' were';
       say = who + ' open for ' + lampWinDur(unionTodayMs) + ' today.';
     }
   }
@@ -581,7 +577,7 @@ function lampWinRow(w, now, accent, first, darkCount, house, room) {
     "<span class='wd-tile' style='background:" + tileBg + ';border:' + tileBorder + "'>" +
     "<ha-icon icon='" + glyph + "' style='--mdc-icon-size:19px;width:19px;height:19px;line-height:0;color:" +
     glyphCol + "'></ha-icon></span>" +
-    "<span class='wd-nm'><span class='wd-name'>" + lampWinEsc(w.name) + "</span><span class='wd-sub'>" + sub + '</span>' + dark + '</span>' +
+    "<span class='wd-nm'><span class='wd-name'>" + lampEsc(w.name) + "</span><span class='wd-sub'>" + sub + '</span>' + dark + '</span>' +
     "<span class='wd-right'>" + batt + '</span></div>';
 }
 
@@ -809,7 +805,7 @@ class LampWindowsDetail extends HTMLElement {
       const ongoing = raw[i].length && raw[i][raw[i].length - 1].ongoing ? raw[i][raw[i].length - 1] : null;
       const battS = w.battery_sensor ? this._hass.states[w.battery_sensor] : null;
       const battV = battS ? parseFloat(battS.state) : NaN;
-      const name = w.name || (s && s.attributes.friendly_name) || w.entity;
+      const name = lampEntityName(this._hass, w.entity, w.name);
       const dflt = w.room ? w.room + ' ' + name.toLowerCase() : name;
       return {
         name: name,
@@ -894,7 +890,7 @@ class LampWindowsDetail extends HTMLElement {
     rooms.forEach(function (room) {
       const ws = list.filter(function (w) { return w.room === room; });
       const n = ws.filter(function (w) { return w.state === 'on'; }).length;
-      html += "<div class='wd-eb'><span>" + lampWinEsc(room) + "</span><span class='c'" +
+      html += "<div class='wd-eb'><span>" + lampEsc(room) + "</span><span class='c'" +
         (n ? " style='color:rgba(" + accent + ",.95)'" : '') + '>' + n + ' of ' + ws.length + ' open</span></div>';
       html += ws.map(function (w, i) { return lampWinRow(w, now, accent, i === 0, null, true); }).join('');
     });

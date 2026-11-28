@@ -195,7 +195,7 @@ Each routine:
 |---|---|---|
 | `entity` | required | The script. A tap runs it |
 | `accent` | required | The lamp's color. A [palette name](../styling.md#colors-by-name) also gives the matching glow and glass |
-| `name`, `icon` | from the script | Your own words and icon |
+| `name`, `icon` | from the script | Your own words and icon. `name` can also use [name parts](../how-it-works.md#names-and-icons) |
 | `rooms` | none | The scenes this routine sets: `{ scene, light }` for each |
 | `glow_color`, `glass_color`, `glass_tint` | from the accent | Fine-tune the lamp's colors |
 | `lamp_height` | built in | On the path, how high the lamp sits, in pixels from the top |

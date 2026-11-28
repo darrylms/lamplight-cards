@@ -39,7 +39,7 @@ function lampHeroPurifier(o) {
   const P = LAMP_PURIFIER_HERO, k = P.height / (P.foot - P.top), f = (v) => v.toFixed(2), HZ = 120;
   const x0 = o.W - 54 - 8 - P.right * k, y0 = HZ - 2 - P.foot * k, dw = P.w * k, dh = P.h * k;
   const cx = x0 + (P.left + P.right) / 2 * k;
-  const img = (href, extra) => '<image href="' + href + '" x="' + f(x0) + '" y="' + f(y0) + '" width="' + f(dw) + '" height="' + f(dh) + '"' + (extra || '') + '/>';
+  const img = (href, extra) => '<image href="' + lampEsc(href) + '" x="' + f(x0) + '" y="' + f(y0) + '" width="' + f(dw) + '" height="' + f(dh) + '"' + (extra || '') + '/>';
   // One light at a strength: one copy at full for each whole step, and one copy for the rest.
   const add = (href, gain, cls) => {
     let s = '';

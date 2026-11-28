@@ -71,7 +71,7 @@
 //
 // Configuration:
 //   light        required. The light or light group the row names
-//   name         optional. Default: the light's friendly_name. The household's word wins
+//   name         optional. Default: the light's own name. Text, or HA name parts (01-entity.js). The household's word wins
 //   icon         optional. Default: the light's icon, else mdi:ceiling-light. The household's icon wins. The tile glyph
 //   accent       required. The tile, its border and the icon's glow
 //   members      default `attributes.entity_id`, else [light]. The lit count
@@ -223,7 +223,7 @@ class LampLight extends HTMLElement {
     this._config = config;
     this._light = config.light;
     // `name` and `icon` are optional: the light gives them (01-entity.js). Resolved in `set hass`.
-    this._name = config.name || config.light;
+    this._name = lampNameText(config.name) || config.light;
     this._icon = config.icon || 'mdi:ceiling-light';
     this._accent = lampColour(config.accent, 'soft');
     this._members = config.members || null;          // null means "work it out"

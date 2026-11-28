@@ -506,9 +506,7 @@ class LampScenes extends HTMLElement {
     this._marks = key;
 
     this._pills.forEach(function (p) {
-      const st = self._hass.states[p.scene.entity];
-      const name = p.scene.name ||
-        (st && st.attributes && st.attributes.friendly_name) || p.scene.entity;
+      const name = lampEntityName(self._hass, p.scene.entity, p.scene.name);
       if (p.word.textContent !== name) p.word.textContent = name;
 
       const on = lampSceneActive(self._hass, p.scene.entity, self._light, self._ids);

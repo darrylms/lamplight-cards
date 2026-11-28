@@ -145,6 +145,31 @@ Most cards take their name and icon from the entity, as Home Assistant's own car
 household calls something by another name, set `name:` and `icon:` yourself. The words on the screen
 should be the ones your family actually says.
 
+```yaml
+name: "Lounge dimmer"
+```
+
+`name:` doesn't have to be fixed text. You can also build it from the names you've already given
+things in Home Assistant:
+
+```yaml
+name:
+  - type: area
+  - type: entity
+```
+
+The parts are `area`, `device`, `entity` and `floor`, plus `text` for your own words (written as
+`type: text` with `text: Mum's` underneath). Home Assistant joins them with a space and leaves out
+any that are empty. So if you rename a room in Home Assistant the card picks up the new name.
+
+Watch out for doubled words, though. The parts are joined just as they are, so a light called
+"Bedroom floor lamp" in the Bedroom comes out as "Bedroom Bedroom floor lamp". In that case
+`entity` on its own is enough.
+
+If none of the parts gives a name, the card falls back to the entity's own name. Name parts work
+anywhere a `name:` belongs to an entity, including the `names` list on the batteries card. A chip
+with no entity still needs plain text.
+
 ## Made for a phone
 
 Lamplight was designed to be phone-first, and everything is checked on a screen 375 pixels wide. It

@@ -119,7 +119,7 @@ function lampHeroPlug(o) {
   const P = LAMP_PLUG_HERO, k = P.size / (P.right - P.left), f = (v) => v.toFixed(2), HZ = 120;
   const dw = P.w * k, dh = P.h * k, x0 = o.W - 54 - 8 - P.right * k + (o.shift || 0), y0 = HZ - 2 - P.foot * k;
   const cx = x0 + (P.left + P.right) / 2 * k;
-  const img = (href, extra) => '<image href="' + href + '" x="' + f(x0) + '" y="' + f(y0) + '" width="' + f(dw) + '" height="' + f(dh) + '"' + (extra || '') + '/>';
+  const img = (href, extra) => '<image href="' + lampEsc(href) + '" x="' + f(x0) + '" y="' + f(y0) + '" width="' + f(dw) + '" height="' + f(dh) + '"' + (extra || '') + '/>';
   const add = ' style="mix-blend-mode:plus-lighter"';
   // The body's strength is a colour matrix, not a CSS filter, so every browser draws it the same.
   const b = P.body;

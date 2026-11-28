@@ -57,12 +57,6 @@ function lampPurBand(v, t) {
   return v <= t.alert ? 'alert' : v <= t.notice ? 'notice' : 'hand';
 }
 
-function lampPurEsc(x) {
-  return String(x == null ? '' : x).replace(/[&<>"']/g, function (c) {
-    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-  });
-}
-
 class LampPurifierDetail extends HTMLElement {
 
   static getStubConfig() {
@@ -148,21 +142,21 @@ class LampPurifierDetail extends HTMLElement {
     // The hero: the air, because "is the air bad" is what the sheet is opened for.
     const hero = v !== null
       ? "<div class='pu-hero'>" + Math.round(v) + '<small>µg/m³' +
-        (this._airLabel ? ' ' + lampPurEsc(this._airLabel) : '') + '</small></div>'
-      : "<div class='pu-hero'>" + (gone ? '--' : (on ? lampPurEsc(lampFanMode(s)) : 'Off')) + '</div>';
+        (this._airLabel ? ' ' + lampEsc(this._airLabel) : '') + '</small></div>'
+      : "<div class='pu-hero'>" + (gone ? '--' : (on ? lampEsc(lampFanMode(s)) : 'Off')) + '</div>';
 
     // The lead: the answer first, then what the purifier does about it.
-    let lead = word ? '<b>The air is ' + lampPurEsc(word) + '.</b> ' : '';
+    let lead = word ? '<b>The air is ' + lampEsc(word) + '.</b> ' : '';
     if (gone) lead += 'The purifier is not answering.';
     else if (!on) lead += 'The purifier is off.';
-    else lead += lampPurEsc(lampFanMode(s)) + ' is running.';
+    else lead += lampEsc(lampFanMode(s)) + ' is running.';
 
     const cur = gone ? null : (on ? (s.attributes.preset_mode || null) : 'off');
     const btn = function (mode, label) {
-      return "<div class='pu-mode' role='button' tabindex='0' data-mode='" + lampPurEsc(mode) + "'" +
+      return "<div class='pu-mode' role='button' tabindex='0' data-mode='" + lampEsc(mode) + "'" +
         (gone ? " aria-disabled='true'" : '') + " aria-pressed='" + (cur === mode) + "'" +
         (cur === mode ? " style='color:#fff;background:var(--pu-on-bg);border-color:var(--pu-on-bd)'" : '') +
-        '>' + lampPurEsc(label) + '</div>';
+        '>' + lampEsc(label) + '</div>';
     };
     const modes = "<div class='pu-lbl'>Mode</div><div class='pu-modes' style='grid-template-columns:repeat(" +
       (this._modes.length + 1) + ",1fr)'>" + btn('off', 'Off') +
@@ -176,9 +170,9 @@ class LampPurifierDetail extends HTMLElement {
       const when = lampFilterWhen(f.hours);
       const verb = f.job === 'clean' ? 'Clean' : 'Replace';
       const detail = when ? verb + ' ' + when : '';
-      return "<div class='pu-row'><div style='min-width:0'><div class='nm'>" + lampPurEsc(c.sheet_name || f.name) +
+      return "<div class='pu-row'><div style='min-width:0'><div class='nm'>" + lampEsc(c.sheet_name || f.name) +
         '</div>' + (detail ? "<div class='dt'" + (band === 'alert' ? " style='color:rgb(" + LAMP_ALERT_RGB + ")'" : '') +
-        '>' + lampPurEsc(detail) + '</div>' : '') + '</div>' +
+        '>' + lampEsc(detail) + '</div>' : '') + '</div>' +
         "<span class='pu-meter'><i style='width:" + Math.max(2, Math.round(f.v)) + '%;background:rgb(' +
         LAMP_PUR_BAND_RGB[band] + ")'></i></span>" +
         "<span class='vv'" + (band === 'alert' ? " style='color:rgb(" + LAMP_ALERT_RGB + ")'" : '') + '>' +

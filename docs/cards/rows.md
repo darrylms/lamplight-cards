@@ -72,7 +72,7 @@ Every kind:
 | `kind` | required | `toggle`, `fan`, `run` or `contact` |
 | `entity` | required | The entity |
 | `accent` | required | The color of the icon tile |
-| `name`, `icon` | from the entity | Your own words and icon |
+| `name`, `icon` | from the entity | Your own words and icon. `name` can also use [name parts](../how-it-works.md#names-and-icons) |
 | `tap_action` | open its details (`run`: nothing) | What a tap on the row does |
 
 `toggle` and `fan`:

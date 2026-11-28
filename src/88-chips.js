@@ -9,7 +9,7 @@
 //   label        optional. Shown in capitals on the first line
 //   chips        required. A list, each with:
 //     entity       required unless tap_action says what to do
-//     name         optional with an `entity`: its friendly_name. The household's name wins
+//     name         optional with an `entity`: its own name. Text, or HA name parts (01-entity.js). The household's name wins
 //     icon         optional with an `entity`: its icon. The household's icon wins
 //     icon_color   default rgba(255,255,255,0.56)
 //     tap_action   default: run the entity - script.turn_on for a script,
@@ -124,10 +124,15 @@ class LampChips extends HTMLElement {
       if (!c.entity && !c.tap_action) {
         throw new Error('chip ' + (i + 1) + ' needs an `entity` or a `tap_action`');
       }
-      // With an entity, `name` and `icon` are optional (01-entity.js). Without one they are required.
-      if (!c.entity && !c.name) throw new Error('chip ' + (i + 1) + ' needs a `name`');
+      // With an entity, `name` and `icon` are optional (01-entity.js). Without one they are required,
+      // and the name must be text: name parts need an entity.
+      if (!c.entity && !lampNameText(c.name)) throw new Error('chip ' + (i + 1) + ' needs a text `name`');
       if (!c.entity && !c.icon) throw new Error('chip ' + (i + 1) + ' needs an `icon`');
       lampChipsMonths(c.months, 'chip ' + (i + 1));
+      // Check the colour here, so that a chip out of season also shows a bad value.
+      if (c.icon_color) {
+        try { lampCssColour(c.icon_color, 'soft'); } catch (e) { throw new Error('chip ' + (i + 1) + ': ' + e.message); }
+      }
       if (c.confirm !== undefined && (!c.confirm || !c.confirm.title)) {
         throw new Error('chip ' + (i + 1) + ': `confirm` needs a `title`');
       }

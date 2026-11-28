@@ -605,7 +605,7 @@ class LampClimateDetail extends HTMLElement {
     const hVal = this._humidity ? this._number(this._humidity) : null;
     const word = lampClimateComfort(tRaw, hVal, this._range, this._damp, this._dry, this._words).word;
     const html = '<div class="cd-now"><div class="cd-big">' + (tVal === null ? '--' : tVal.toFixed(1)) + '<span>°</span></div>' +
-      '<div class="cd-feel"><b>' + word + '</b>' + (hVal !== null ? '<span>' + Math.round(hVal) + '% humidity</span>' : '') + '</div></div>';
+      '<div class="cd-feel"><b>' + lampEsc(word) + '</b>' + (hVal !== null ? '<span>' + Math.round(hVal) + '% humidity</span>' : '') + '</div></div>';
     if (html !== this._heroHtml) { this._heroHtml = html; this._heroEl.innerHTML = html; }
   }
 
@@ -632,11 +632,11 @@ class LampClimateDetail extends HTMLElement {
     if (!s) { this._sectionsEl.innerHTML = ''; return; }
     const sleep = lampClimateDetailSleepSay(s.nights, this._sleep, this._sleepMax);
     let html = sleep ? '<p class="cd-sleep"><svg viewBox="-7 -7 14 14" width="13" height="13" aria-hidden="true"><path d="' +
-      LAMP_CLIMATE_DETAIL_MOON + '" fill="rgba(255,255,255,.56)"/></svg><span><b>' + sleep + '</b></span></p>' : '';
+      LAMP_CLIMATE_DETAIL_MOON + '" fill="rgba(255,255,255,.56)"/></svg><span><b>' + lampEsc(sleep) + '</b></span></p>' : '';
     if (s.looks.length) {
       html += '<div class="cd-eb">Worth a look</div>' + s.looks.map(function (l) {
         const k = LAMP_CLIMATE_DETAIL_LOOK[l.kind], col = typeof k === 'number' ? lampComfortColour(k) : k;
-        return '<div class="cd-look" style="--k:rgb(' + col + ')"><b>' + l.head + '</b><span>' + l.line + '</span></div>';
+        return '<div class="cd-look" style="--k:rgb(' + col + ')"><b>' + lampEsc(l.head) + '</b><span>' + lampEsc(l.line) + '</span></div>';
       }).join('');
     }
     this._sectionsEl.innerHTML = html;
