@@ -145,6 +145,10 @@ Most cards take their name and icon from the entity, as Home Assistant's own car
 household calls something by another name, set `name:` and `icon:` yourself. The words on the screen
 should be the ones your family actually says.
 
+```yaml
+name: "Lounge dimmer"
+```
+
 `name:` doesn't have to be fixed text. You can also build it from the names you've already given
 things in Home Assistant:
 
