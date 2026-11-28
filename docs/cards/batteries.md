@@ -119,7 +119,9 @@ categories:
 
 ### Without the extras
 
-Without `names`, each battery uses its own name, with "Battery" trimmed off the end.
+Without `names`, each battery shows the name of its device, so a dimmer's battery just says
+"Bedroom dimmer". If a battery isn't part of a device it uses its own name with "Battery" trimmed
+off the end.
 
 ### Tips
 

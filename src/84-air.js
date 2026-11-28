@@ -50,7 +50,7 @@ function lampFilterList(hass, filters, alert) {
     if (isNaN(v)) return;
     const h = parseFloat(s.attributes.time_remaining);
     out.push({
-      name: f.name || (s.attributes.friendly_name || f.entity),
+      name: lampEntityName(hass, f.entity, f.name),
       job: f.job === 'clean' ? 'clean' : 'replace',
       v: v,
       hours: isNaN(h) ? null : h,

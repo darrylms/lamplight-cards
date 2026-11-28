@@ -78,7 +78,7 @@ scenes:
 |---|---|---|
 | `light` | required | The light or light group |
 | `accent` | required | The color of the icon tile |
-| `name`, `icon` | from the light | Your own words and icon |
+| `name`, `icon` | from the light | Your own words and icon. `name` can also use [name parts](../how-it-works.md#names-and-icons) |
 | `members` | the group's members | The bulbs to count. List them for a light group (see Tips) |
 | `side_bar` | `members` | The bulbs whose colors show in the left bar, top to bottom |
 | `side_bar_opacity` | `[0.14, 0.85]` | The left bar when the bulb is off and when it is on. `false` hides it |

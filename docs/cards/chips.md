@@ -78,7 +78,7 @@ Each chip:
 | Key | Default | What it does |
 |---|---|---|
 | `entity` | required, unless `tap_action` says what to do | The scene, script or device |
-| `name`, `icon` | from the entity | Your own words and icon |
+| `name`, `icon` | from the entity | Your own words and icon. `name` can also use [name parts](../how-it-works.md#names-and-icons) |
 | `icon_color` | soft white | The icon's color: any color, or a [palette name](../styling.md#colors-by-name) |
 | `tap_action` | run it, or open its details | Any Home Assistant action |
 | `months` | the strip's months | The months this chip shows |

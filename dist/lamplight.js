@@ -283,8 +283,22 @@ function lampRamp(pair, f) {
 // The name and icon of a card that shows one entity (22 Nov 2026, Lamplight 0.143.0-dev).
 //
 // The household can give a `name` and an `icon` in the card config. A value the household gives
-// always wins. If the household gives none, the card reads the entity: `friendly_name` and
+// always wins. If the household gives none, the card reads the entity: its name and
 // `attributes.icon`. If the entity has no icon, the card uses the icon of its domain below.
+//
+// The name (28 Nov 2026, Lamplight 1.1.3-dev). Home Assistant will remove the `friendly_name`
+// attribute in a future release. From HA 2026.4, `hass.formatEntityName()` builds the name from
+// the registry, as the built-in cards do. The card uses it first. On an older HA, or if it gives
+// an empty name, the card uses `friendly_name`, then the entity ID. The default parts are the
+// device name and the entity name, which give the same text as `friendly_name` (127 of 127
+// entities on the household's dashboard, measured 28 Nov 2026). Each part must be an object:
+// HA shows a string part as literal text.
+//
+// Name parts in the config (28 Nov 2026, Lamplight 1.1.3-dev). A `name` is text, one name part,
+// or a list of name parts, in the form of HA's own cards: { type: area | device | entity | floor }
+// or { type: text, text: '...' }. HA joins the parts with a space and skips an empty part. It
+// does not remove a word that two parts share. A bare string in a list is text. If the parts give
+// an empty name, the card uses `friendly_name`, then the entity ID.
 // The entity is not known until Home Assistant sends `hass`, so a card calls these in its
 // `set hass` and draws again only when a result changes.
 
@@ -320,10 +334,41 @@ const LAMP_BINARY_ICONS = {
   battery: 'mdi:battery-outline'
 };
 
-function lampEntityName(hass, entityId, given) {
-  if (given) return given;
+const LAMP_NAME_PARTS = [{ type: 'device' }, { type: 'entity' }];
+
+// The name that Home Assistant builds from the registry, or '' if this HA has no helper.
+// `parts` is one part or a list of parts, for example { type: 'device' }.
+function lampHaName(hass, s, parts) {
+  if (!s || !hass || typeof hass.formatEntityName !== 'function') return '';
+  try {
+    return String(hass.formatEntityName(s, parts || LAMP_NAME_PARTS) || '').trim();
+  } catch (e) {
+    return '';
+  }
+}
+
+// The text of a config `name`, or '' if the name is name parts or is not given.
+function lampNameText(given) {
+  if (typeof given === 'string') return given;
+  if (typeof given === 'number') return String(given);
+  return '';
+}
+
+// The name parts of a config `name`, or null if the name is text or is not given.
+function lampNameParts(given) {
+  if (!given || typeof given !== 'object') return null;
+  const parts = (Array.isArray(given) ? given : [given])
+    .map(function (p) { return typeof p === 'string' ? { type: 'text', text: p } : p; })
+    .filter(function (p) { return p && typeof p.type === 'string'; });
+  return parts.length ? parts : null;
+}
+
+function lampEntityName(hass, entityId, given, parts) {
+  const text = lampNameText(given);
+  if (text) return text;
   const s = hass && hass.states && hass.states[entityId];
-  return (s && s.attributes && s.attributes.friendly_name) || entityId || '';
+  return lampHaName(hass, s, lampNameParts(given) || parts) ||
+    (s && s.attributes && s.attributes.friendly_name) || entityId || '';
 }
 
 function lampEntityIcon(hass, entityId, given) {
@@ -7025,9 +7070,7 @@ class LampScenes extends HTMLElement {
     this._marks = key;
 
     this._pills.forEach(function (p) {
-      const st = self._hass.states[p.scene.entity];
-      const name = p.scene.name ||
-        (st && st.attributes && st.attributes.friendly_name) || p.scene.entity;
+      const name = lampEntityName(self._hass, p.scene.entity, p.scene.name);
       if (p.word.textContent !== name) p.word.textContent = name;
 
       const on = lampSceneActive(self._hass, p.scene.entity, self._light, self._ids);
@@ -7914,7 +7957,7 @@ class LampSliderLock {
 //
 // Configuration:
 //   light        required. The light or light group the row names
-//   name         optional. Default: the light's friendly_name. The household's word wins
+//   name         optional. Default: the light's own name. Text, or HA name parts (01-entity.js). The household's word wins
 //   icon         optional. Default: the light's icon, else mdi:ceiling-light. The household's icon wins. The tile glyph
 //   accent       required. The tile, its border and the icon's glow
 //   members      default `attributes.entity_id`, else [light]. The lit count
@@ -8066,7 +8109,7 @@ class LampLight extends HTMLElement {
     this._config = config;
     this._light = config.light;
     // `name` and `icon` are optional: the light gives them (01-entity.js). Resolved in `set hass`.
-    this._name = config.name || config.light;
+    this._name = lampNameText(config.name) || config.light;
     this._icon = config.icon || 'mdi:ceiling-light';
     this._accent = lampColour(config.accent, 'soft');
     this._members = config.members || null;          // null means "work it out"
@@ -8739,7 +8782,7 @@ function lampFilterList(hass, filters, alert) {
     if (isNaN(v)) return;
     const h = parseFloat(s.attributes.time_remaining);
     out.push({
-      name: f.name || (s.attributes.friendly_name || f.entity),
+      name: lampEntityName(hass, f.entity, f.name),
       job: f.job === 'clean' ? 'clean' : 'replace',
       v: v,
       hours: isNaN(h) ? null : h,
@@ -8801,7 +8844,7 @@ function lampFilterWhen(hours) {
 // Configuration, every kind:
 //   kind       required. toggle | run | contact
 //   entity     required
-//   name       optional. Default: the entity's friendly_name. The household's name wins
+//   name       optional. Default: the entity's own name. Text, or HA name parts (01-entity.js). The household's name wins
 //   icon       optional. Default: the entity's icon, else its domain's. The household's icon wins. The tile glyph. For `contact`, the glyph when off
 //   accent     required. The tile, its border and (for `run`) the glow
 //   tap_action default `more-info` on `entity` (toggle, contact) or `none`
@@ -8878,7 +8921,7 @@ class LampRow extends HTMLElement {
     this._entity = config.entity;
     this._domain = config.entity.split('.')[0];
     // `name` and `icon` are optional: the entity gives them (01-entity.js). Resolved in `set hass`.
-    this._name = config.name || this._entity;
+    this._name = lampNameText(config.name) || this._entity;
     this._icon = config.icon || lampEntityIcon(null, config.entity);
     this._accent = lampColour(config.accent, 'soft');
     this._tap = config.tap_action ||
@@ -9387,7 +9430,7 @@ function lampConfirm(opts) {
 //   label        optional. Shown in capitals on the first line
 //   chips        required. A list, each with:
 //     entity       required unless tap_action says what to do
-//     name         optional with an `entity`: its friendly_name. The household's name wins
+//     name         optional with an `entity`: its own name. Text, or HA name parts (01-entity.js). The household's name wins
 //     icon         optional with an `entity`: its icon. The household's icon wins
 //     icon_color   default rgba(255,255,255,0.56)
 //     tap_action   default: run the entity - script.turn_on for a script,
@@ -9502,8 +9545,9 @@ class LampChips extends HTMLElement {
       if (!c.entity && !c.tap_action) {
         throw new Error('chip ' + (i + 1) + ' needs an `entity` or a `tap_action`');
       }
-      // With an entity, `name` and `icon` are optional (01-entity.js). Without one they are required.
-      if (!c.entity && !c.name) throw new Error('chip ' + (i + 1) + ' needs a `name`');
+      // With an entity, `name` and `icon` are optional (01-entity.js). Without one they are required,
+      // and the name must be text: name parts need an entity.
+      if (!c.entity && !lampNameText(c.name)) throw new Error('chip ' + (i + 1) + ' needs a text `name`');
       if (!c.entity && !c.icon) throw new Error('chip ' + (i + 1) + ' needs an `icon`');
       lampChipsMonths(c.months, 'chip ' + (i + 1));
       // Check the colour here, so that a chip out of season also shows a bad value.
@@ -9699,7 +9743,7 @@ window.customCards.push({
 // Configuration:
 //   routines    required. In the day order, from the left. Each has:
 //     entity      required. The script. A tap runs it
-//     name        optional: the script's friendly_name. The household's name wins
+//     name        optional: the script's own name. Text, or HA name parts (01-entity.js). The household's name wins
 //     icon        optional: the script's icon. The household's icon wins
 //     accent      required. The lamp's colour: a palette name (marigold), or "r,g,b". A palette name
 //                 also gives the glow, the glass and the orb of that colour
@@ -10134,7 +10178,7 @@ class LampRoutines extends HTMLElement {
     // gives the rest in `set hass`. Until then the entity ID and a script icon fill the gap.
     this._given = config.routines.map(function (r) { return { name: r.name, icon: r.icon }; });
     config = Object.assign({}, config, { routines: config.routines.map(function (r) {
-      return Object.assign({}, r, { name: r.name || r.entity, icon: r.icon || lampEntityIcon(null, r.entity) });
+      return Object.assign({}, r, { name: lampNameText(r.name) || r.entity, icon: r.icon || lampEntityIcon(null, r.entity) });
     }) });
     // An `accent` that is a palette name gives the accent (soft), the glow (deep), and the glass and
     // the orb where the palette has them. A key written on the routine wins.
@@ -16134,7 +16178,11 @@ function lampBatteryList(hass, exclude, names) {
     const v = parseFloat(s.state);
     if (isNaN(v)) return;
     const meta = nm[id] || {};
-    const name = meta.name || (s.attributes.friendly_name || id).replace(/ Battery( level)?$/i, '');
+    // The household's text or name parts first (01-entity.js). Else the device name (HA 2026.4
+    // and later). Else the old way: `friendly_name` without its " Battery" word.
+    const name = lampNameText(meta.name) ||
+      lampHaName(hass, s, lampNameParts(meta.name) || { type: 'device' }) ||
+      (s.attributes.friendly_name || id).replace(/ Battery( level)?$/i, '');
     list.push({ id: id, v: v, n: name, m: meta.model || '', s: meta.short || '' });
   });
   list.sort(function (a, b) { return a.v - b.v || (a.n < b.n ? -1 : 1); });
@@ -16541,7 +16589,7 @@ window.customCards.push({
 //
 // PORTABILITY. The card holds no household entity ID. Configuration:
 //   rooms        [{ name, windows: [{ entity, name }] }], in the order the text ladder
-//                uses. `name` on a window defaults to its own `friendly_name`.
+//                uses. `name` on a window defaults to the entity's own name. Text, or HA name parts.
 //   tap_action   default { action: navigate, navigation_path: '#windows' }, so a stranger's
 //                config works once that pop-up exists. The household's own config sets
 //                { action: none }: there is no #windows pop-up yet.
@@ -16922,7 +16970,7 @@ class LampWindowStrip extends LampFootPanel {
     flat.forEach(function (w, i) {
       const s = states[i];
       if (s && s.state === 'on') {
-        const label = w.given || (s.attributes && s.attributes.friendly_name) || w.entity;
+        const label = lampEntityName(hass, w.entity, w.given);
         open.push({ room: w.room, name: label });
       }
     });
@@ -18541,7 +18589,7 @@ class LampWindowsDetail extends HTMLElement {
       const ongoing = raw[i].length && raw[i][raw[i].length - 1].ongoing ? raw[i][raw[i].length - 1] : null;
       const battS = w.battery_sensor ? this._hass.states[w.battery_sensor] : null;
       const battV = battS ? parseFloat(battS.state) : NaN;
-      const name = w.name || (s && s.attributes.friendly_name) || w.entity;
+      const name = lampEntityName(this._hass, w.entity, w.name);
       const dflt = w.room ? w.room + ' ' + name.toLowerCase() : name;
       return {
         name: name,

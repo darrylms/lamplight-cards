@@ -38,7 +38,7 @@
 // Configuration, every kind:
 //   kind       required. toggle | run | contact
 //   entity     required
-//   name       optional. Default: the entity's friendly_name. The household's name wins
+//   name       optional. Default: the entity's own name. Text, or HA name parts (01-entity.js). The household's name wins
 //   icon       optional. Default: the entity's icon, else its domain's. The household's icon wins. The tile glyph. For `contact`, the glyph when off
 //   accent     required. The tile, its border and (for `run`) the glow
 //   tap_action default `more-info` on `entity` (toggle, contact) or `none`
@@ -115,7 +115,7 @@ class LampRow extends HTMLElement {
     this._entity = config.entity;
     this._domain = config.entity.split('.')[0];
     // `name` and `icon` are optional: the entity gives them (01-entity.js). Resolved in `set hass`.
-    this._name = config.name || this._entity;
+    this._name = lampNameText(config.name) || this._entity;
     this._icon = config.icon || lampEntityIcon(null, config.entity);
     this._accent = lampColour(config.accent, 'soft');
     this._tap = config.tap_action ||

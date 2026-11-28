@@ -77,7 +77,11 @@ function lampBatteryList(hass, exclude, names) {
     const v = parseFloat(s.state);
     if (isNaN(v)) return;
     const meta = nm[id] || {};
-    const name = meta.name || (s.attributes.friendly_name || id).replace(/ Battery( level)?$/i, '');
+    // The household's text or name parts first (01-entity.js). Else the device name (HA 2026.4
+    // and later). Else the old way: `friendly_name` without its " Battery" word.
+    const name = lampNameText(meta.name) ||
+      lampHaName(hass, s, lampNameParts(meta.name) || { type: 'device' }) ||
+      (s.attributes.friendly_name || id).replace(/ Battery( level)?$/i, '');
     list.push({ id: id, v: v, n: name, m: meta.model || '', s: meta.short || '' });
   });
   list.sort(function (a, b) { return a.v - b.v || (a.n < b.n ? -1 : 1); });

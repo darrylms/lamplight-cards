@@ -14,7 +14,7 @@
 //
 // PORTABILITY. The card holds no household entity ID. Configuration:
 //   rooms        [{ name, windows: [{ entity, name }] }], in the order the text ladder
-//                uses. `name` on a window defaults to its own `friendly_name`.
+//                uses. `name` on a window defaults to the entity's own name. Text, or HA name parts.
 //   tap_action   default { action: navigate, navigation_path: '#windows' }, so a stranger's
 //                config works once that pop-up exists. The household's own config sets
 //                { action: none }: there is no #windows pop-up yet.
@@ -395,7 +395,7 @@ class LampWindowStrip extends LampFootPanel {
     flat.forEach(function (w, i) {
       const s = states[i];
       if (s && s.state === 'on') {
-        const label = w.given || (s.attributes && s.attributes.friendly_name) || w.entity;
+        const label = lampEntityName(hass, w.entity, w.given);
         open.push({ room: w.room, name: label });
       }
     });

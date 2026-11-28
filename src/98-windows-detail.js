@@ -805,7 +805,7 @@ class LampWindowsDetail extends HTMLElement {
       const ongoing = raw[i].length && raw[i][raw[i].length - 1].ongoing ? raw[i][raw[i].length - 1] : null;
       const battS = w.battery_sensor ? this._hass.states[w.battery_sensor] : null;
       const battV = battS ? parseFloat(battS.state) : NaN;
-      const name = w.name || (s && s.attributes.friendly_name) || w.entity;
+      const name = lampEntityName(this._hass, w.entity, w.name);
       const dflt = w.room ? w.room + ' ' + name.toLowerCase() : name;
       return {
         name: name,
