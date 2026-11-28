@@ -350,7 +350,7 @@ class LampPopup extends HTMLElement {
     probe.remove();
     if (!d) return;
     this.$gw.innerHTML = '<svg viewBox="0 0 24 24">' + this._gradDefs() +
-      '<path d="' + d + '" fill="url(#' + this._gradId + ')"/></svg>';
+      '<path d="' + lampEsc(d) + '" fill="url(#' + this._gradId + ')"/></svg>';
   }
 
   // The accent gradient, lit from the top right: core, accent, ember.
@@ -382,7 +382,7 @@ class LampPopup extends HTMLElement {
     const key = lampGlyphKey(wx.state, night);
     if (key === this._wxKey) return;
     this._wxKey = key;
-    this.$gw.innerHTML = '<svg viewBox="0 0 100 100" data-glyph="' + key + '">' + this._gradDefs() +
+    this.$gw.innerHTML = '<svg viewBox="0 0 100 100" data-glyph="' + lampEsc(key) + '">' + this._gradDefs() +
       '<g transform="translate(-6 0) scale(4.1667)">' +
       lampPopupWeatherLine(key, 'url(#' + this._gradId + ')', this._gradId + 'm') + '</g></svg>';
   }
@@ -747,7 +747,7 @@ class LampPopup extends HTMLElement {
         .back { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.55);
                 touch-action: none; }
         .sheet { position: fixed; left: 0; right: 0; bottom: 0; top: 64px; z-index: 101;
-                 margin: 0 auto; max-width: ${this._widthDesktop}; background: #101219;
+                 margin: 0 auto; max-width: ${lampEsc(this._widthDesktop)}; background: #101219;
                  border-radius: 28px 28px 0 0; overflow: hidden; display: flex;
                  flex-direction: column; outline: none; transition: transform 340ms ease;
                  font-family: var(--primary-font-family, Roboto, Noto, sans-serif);
@@ -826,8 +826,8 @@ class LampPopup extends HTMLElement {
         .edit .eh { margin-left: auto; color: var(--lamplight-ink-quiet); font-size: var(--lamplight-t-caption);
                     font-variant-numeric: tabular-nums; }
       </style>
-      <div class="edit"><ha-icon icon="${this._mdiIcon || (this._lampIcon && LAMP_POPUP_GLYPHS[this._lampIcon].mdi) || (this._arcEntity && 'mdi:weather-sunset') || 'mdi:weather-cloudy'}"></ha-icon>
-        <span class="et"></span><span class="eh">${this._hash}</span></div>
+      <div class="edit"><ha-icon icon="${lampEsc(this._mdiIcon || (this._lampIcon && LAMP_POPUP_GLYPHS[this._lampIcon].mdi) || (this._arcEntity && 'mdi:weather-sunset') || 'mdi:weather-cloudy')}"></ha-icon>
+        <span class="et"></span><span class="eh">${lampEsc(this._hash)}</span></div>
       <div class="wrap" hidden>
         <div class="back"></div>
         <div class="sheet" tabindex="-1" role="dialog" aria-modal="true">

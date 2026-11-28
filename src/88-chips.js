@@ -128,6 +128,10 @@ class LampChips extends HTMLElement {
       if (!c.entity && !c.name) throw new Error('chip ' + (i + 1) + ' needs a `name`');
       if (!c.entity && !c.icon) throw new Error('chip ' + (i + 1) + ' needs an `icon`');
       lampChipsMonths(c.months, 'chip ' + (i + 1));
+      // Check the colour here, so that a chip out of season also shows a bad value.
+      if (c.icon_color) {
+        try { lampCssColour(c.icon_color, 'soft'); } catch (e) { throw new Error('chip ' + (i + 1) + ': ' + e.message); }
+      }
       if (c.confirm !== undefined && (!c.confirm || !c.confirm.title)) {
         throw new Error('chip ' + (i + 1) + ': `confirm` needs a `title`');
       }

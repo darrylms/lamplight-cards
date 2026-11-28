@@ -215,7 +215,15 @@ function lampIsPalette(v) {
 
 // For a key that has always taken any CSS colour (a chip's icon_color): a palette or reserved
 // name becomes "rgb(r,g,b)", and anything else is used as it is written, alpha included.
+// The browser ignores a colour that it cannot read, so a typing error showed no message. Now a
+// value that is not a CSS colour gives an error (28 Nov 2026). A browser without CSS.supports
+// skips the check.
 function lampCssColour(v, tone) {
   const s = String(v).trim();
-  return (lampIsPalette(s) || /^[a-z]+-[a-z]+$/.test(s)) ? 'rgb(' + lampColour(s, tone) + ')' : s;
+  if (lampIsPalette(s) || /^[a-z]+-[a-z]+$/.test(s)) return 'rgb(' + lampColour(s, tone) + ')';
+  if (typeof CSS !== 'undefined' && CSS.supports && !CSS.supports('color', s)) {
+    throw new Error('"' + s + '" is not a colour. Write a CSS colour or a palette name: ' +
+      Object.keys(LAMP_PALETTE).join(', '));
+  }
+  return s;
 }

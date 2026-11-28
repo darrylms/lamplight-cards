@@ -606,7 +606,7 @@ class LampWeather extends LampShell {
       tries.push([f, '']);
     });
     const range = document.createRange();
-    const reason = w.reason.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const reason = lampEsc(w.reason);
     for (let i = 0; i < tries.length; i++) {
       const html = reason + (tries[i][0] ? '<span class="lamp-warn-time"> · ' + tries[i][0] + '</span>' : '') + tries[i][1];
       if (t.innerHTML !== html) t.innerHTML = html;
@@ -1147,7 +1147,7 @@ class LampWeather extends LampShell {
       // The non-breaking space holds the gap the absolutely positioned unit
       // then sits in. See the note on `.temp span` in _staticCss.
       q('.temp').innerHTML = temp === undefined ? ''
-        : this._n(temp) + '&nbsp;<span>' + unit + '</span>';
+        : this._n(temp) + '&nbsp;<span>' + lampEsc(unit) + '</span>';
       q('.attribute').textContent = hl
         ? this._n(hl.hi) + ' ' + unit + ' / ' + this._n(hl.lo) + ' ' + unit : '';
     }
@@ -1155,7 +1155,7 @@ class LampWeather extends LampShell {
       this._wrap.querySelector('.forecast').innerHTML =
         tiles.map(function (h) {
           return '<div class="forecast-item">' +
-            '<div class="forecast-item-label">' + h.label + '</div>' +
+            '<div class="forecast-item-label">' + lampEsc(h.label) + '</div>' +
             '<div class="forecast-image-icon">' + lampGlyph(h.key, 22) + '</div>' +
             '<div class="temp">' + self._n(h.temp) + '\u00b0</div>' +
             '</div>';

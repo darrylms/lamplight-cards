@@ -260,7 +260,7 @@ function lampGlyph(key, px) {
   // test, and a person with the inspector open, can see which of the fifteen
   // was chosen without matching path data.
   return '<svg width="' + px + '" height="' + px + '" viewBox="0 0 24 24" ' +
-         'data-glyph="' + key + '" aria-hidden="true" focusable="false">' +
+         'data-glyph="' + lampEsc(key) + '" aria-hidden="true" focusable="false">' +
          build() + '</svg>';
 }
 

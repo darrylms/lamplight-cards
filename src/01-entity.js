@@ -6,6 +6,15 @@
 // The entity is not known until Home Assistant sends `hass`, so a card calls these in its
 // `set hass` and draws again only when a result changes.
 
+// Escape a value for HTML text and for an attribute in single or double quotes. Use it on each
+// entity value, config string and feed value that a card writes into innerHTML. This is the one
+// escape helper for all cards: do not write a copy in a card (28 Nov 2026).
+function lampEsc(x) {
+  return String(x == null ? '' : x).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
 const LAMP_DOMAIN_ICONS = {
   light: 'mdi:lightbulb-outline',
   switch: 'mdi:toggle-switch-variant-outline',

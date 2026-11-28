@@ -84,8 +84,6 @@ function lampBatteryList(hass, exclude, names) {
   return list;
 }
 
-function lampBattEsc(x) { return String(x == null ? '' : x); }
-
 // ---- lamplight-battery-strip: the footer tile -----------------------------------------------
 
 const LAMP_BATT_TILE_RGB = LAMP_MEANINGS.battery;
@@ -295,7 +293,7 @@ const LAMP_BATT_CSS = '<style>' +
 
 function lampBattRow(x, t) {
   const b = lampBattBand(x.v, t);
-  return "<div class='bs-row'><span class='nm'>" + lampBattEsc(x.n) + "</span>" +
+  return "<div class='bs-row'><span class='nm'>" + lampEsc(x.n) + "</span>" +
     "<span class='bs-meter'><i style='width:" + Math.max(2, Math.round(x.v)) + "%;background:rgb(" +
     LAMP_BATT_BAND_RGB[b] + ")'></i></span>" +
     "<span class='vv'" + (b === 'alert' ? " style='color:rgb(" + LAMP_MEANINGS.battery.alert + ")'" : '') + '>' + Math.round(x.v) +
@@ -312,7 +310,7 @@ function lampBattEyebrow(band, count) {
 function lampBattLead(list, t) {
   const low = list[0];
   const worth = list.filter(function (x) { return lampBattBand(x.v, t) === 'notice'; }).length;
-  const at = lampBattEsc(low.n) + ', at ' + Math.round(low.v) + '%';
+  const at = lampEsc(low.n) + ', at ' + Math.round(low.v) + '%';
   if (worth) {
     return '<b>Nothing to replace yet.</b> ' + worth + ' worth noticing; the lowest is the ' + at + '.';
   }
@@ -332,8 +330,8 @@ function lampBattAlarm(list, lowCount) {
     : (list[1] ? 'next lowest <b>' + Math.round(list[1].v) + '%</b>' : '');
   return "<div class='bs-sum bs-alarm'><span class='hl'>Replace soon</span>" +
     "<div class='bs-big'>" + Math.round(top.v) + '<small>%</small></div>' +
-    "<div class='hn'>" + lampBattEsc(top.n) + '</div>' +
-    (top.m ? "<div class='hm'>" + lampBattEsc(top.m) + '</div>' : '') +
+    "<div class='hn'>" + lampEsc(top.n) + '</div>' +
+    (top.m ? "<div class='hm'>" + lampEsc(top.m) + '</div>' : '') +
     "<span class='bs-meter'><i style='width:" + Math.max(2, Math.round(top.v)) +
     "%;background:rgb(" + LAMP_MEANINGS.battery.alert + ")'></i></span>" +
     "<div class='bs-foot'><span><b>" + list.length + '</b> ' + (list.length === 1 ? 'battery' : 'batteries') +
@@ -349,7 +347,7 @@ function lampBattFold(devs, categories, t) {
   const parts = Object.keys(byModel).map(function (k) {
     const n = byModel[k];
     const cat = (categories && categories[k]) || k.toLowerCase() || 'device';
-    return n + ' ' + cat + (n === 1 ? '' : 's');
+    return n + ' ' + lampEsc(cat + (n === 1 ? '' : 's'));
   }).sort(function (a, b) { return parseInt(b, 10) - parseInt(a, 10); });
 
   return "<details class='bs-det'><summary>" +
